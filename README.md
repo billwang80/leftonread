@@ -1,5 +1,10 @@
 # leftonread
 
+### Useful links
+- https://www.django-rest-framework.org/tutorial/quickstart/#:~:text=%23%20Create%20the%20project%20directory%20mkdir,pip%20install%20django%20pip%20install
+- https://reactnative.dev/docs/environment-setup
+
+
 ### To setup project (Windows):
 - clone repo
 - run
