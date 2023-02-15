@@ -4,15 +4,15 @@ from django.contrib.auth.models import User
 from .models import Book
 
 class BookSerializer(serializers.ModelSerializer):
-  user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
+  users = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
 
   class Meta:
     model = Book
-    fields = ('title', 'author', 'country', 'language', 'word_count', 'difficulty', 'cover_image_url', 'popularity', 'date_written', 'description', 'user')
+    fields = ('title', 'author', 'country', 'language', 'word_count', 'difficulty', 'cover_image_url', 'popularity', 'publish_date', 'description', 'users')
 
 class UserSerializer(serializers.ModelSerializer):
-  book = BookSerializer(many=True, read_only=True)
+  # books = BookSerializer(many=True, read_only=True)
 
   class Meta:
     model = User
-    fields = ('username', 'email', 'id', 'book')
+    fields = ('id', 'username', 'email', 'first_name', 'last_name')

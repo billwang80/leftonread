@@ -13,20 +13,20 @@ class Book(models.Model):
     MEDIUM = 'M', _('Medium')
     HARD = 'H', _('Hard')
 
-  title = models.CharField(max_length=60, default="")
-  author = models.CharField(max_length=60, default="")
-  country = models.CharField(max_length=60, default="")
-  language = models.CharField(max_length=60, default="")
+  title = models.CharField(max_length=100, default="", blank=True)
+  author = models.CharField(max_length=60, default="", blank=True)
+  country = models.CharField(max_length=60, default="", blank=True)
+  language = models.CharField(max_length=2, default="", blank=True)
   word_count = models.IntegerField(null=True, blank=True)
   difficulty = models.CharField(
     max_length=1, 
     choices=Difficulty.choices,
     default=Difficulty.EASY,
   )
-  cover_image_url = models.URLField(max_length=200, default="")
+  cover_image_url = models.URLField(max_length=200, default="", blank=True)
   popularity = models.IntegerField(null=True, blank=True) # need further discussion -> maybe number of users reading 
-  date_written = models.DateField(null=True, blank=True)
-  description = models.CharField(max_length=2000, default="")
+  publish_date = models.DateField(null=True, blank=True) # this will only be year
+  description = models.CharField(max_length=2000, default="", blank=True)
   users = models.ManyToManyField(User, related_name='books', through='UserBookRelation', blank=True)
 
 class UserBookRelation(models.Model):
@@ -36,11 +36,11 @@ class UserBookRelation(models.Model):
     TOREAD = 'TR', _('To Read')
     COMPLETE = 'CO', _('Completed')
 
-  user_id = models.ForeignKey(
+  user = models.ForeignKey(
     settings.AUTH_USER_MODEL,
     on_delete=models.CASCADE,
   )
-  book_id = models.ForeignKey(
+  book = models.ForeignKey(
     "Book",
     on_delete=models.CASCADE,
   )
@@ -51,40 +51,6 @@ class UserBookRelation(models.Model):
   )
   start_date = models.DateField(null=True, blank=True)
   date_completed = models.DateField(null=True, blank=True)
-
-
-# we can combine userbookcompleted and userbookreading and plantoread
-# class UserBookCompleted(models.Model):
-#   user_id = models.ForeignKey(
-#     settings.AUTH_USER_MODEL,
-#     on_delete=models.CASCADE,
-#   )
-#   book_id = models.ForeignKey(
-#     "Book",
-#     on_delete=models.CASCADE,
-#   )
-#   date_completed = models.DateField(default=date.today)
-
-# class UserBookReading(models.Model):
-#   user_id = models.ForeignKey(
-#     settings.AUTH_USER_MODEL,
-#     on_delete=models.CASCADE,
-#   )
-#   book_id = models.ForeignKey(
-#     "Book",
-#     on_delete=models.CASCADE,
-#   )
-#   start_date = models.DateField(default=date.today)
-
-# class UserBookToRead(models.Model):
-#   user_id = models.ForeignKey(
-#     settings.AUTH_USER_MODEL,
-#     on_delete=models.CASCADE,
-#   )
-#   book_id = models.ForeignKey(
-#     "Book",
-#     on_delete=models.CASCADE,
-#   )
 
 # possibly combine genre and time period into tags? -> # class BookTag() # relationship table for books and tags
 class Genre(models.Model):
