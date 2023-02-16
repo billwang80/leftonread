@@ -3,11 +3,13 @@ from django.urls import path, include
 from .views import (
   BookListByUserApiView,
   UserListByBookApiView,
+  ListFriends,
 )
 
 urlpatterns = [
   # path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-  path('book/', BookListByUserApiView.as_view()),
-  path('book/<int:user_id>/', BookListByUserApiView.as_view()),
-  path('user/<int:book_id>/', UserListByBookApiView.as_view()),
+  path('books-by-user/', BookListByUserApiView.as_view()),
+  path('books-by-user/<int:user_id>/', BookListByUserApiView.as_view()),
+  path('users-by-book/<int:book_id>/', UserListByBookApiView.as_view()),
+  path('friends/<int:user_id>/', ListFriends.as_view()),
 ]
