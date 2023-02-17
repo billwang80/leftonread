@@ -16,7 +16,7 @@ function Home({navigation}) {
           <Text style={styles.sectionName}>Recommended</Text>
           <FlatList
             data={DATA}    
-            renderItem={({item}) => <View backgroundColor='red' style={styles.recommendedItem}></View>}
+            renderItem={({item}) => <View backgroundColor='black' style={styles.recommendedItem}></View>}
             keyExtractor={item => item.id}
             horizontal={true}
             style={styles.recommended}
@@ -24,7 +24,7 @@ function Home({navigation}) {
           <Text style={styles.sectionName}>Popular Content</Text>
           <FlatList
             data={DATA}    
-            renderItem={({item}) => <View backgroundColor='red' style={styles.popularItem}></View>}
+            renderItem={({item}) => <View backgroundColor='black' style={styles.popularItem}></View>}
             keyExtractor={item => item.id}
             horizontal={true}
             style={styles.popular}
@@ -32,7 +32,7 @@ function Home({navigation}) {
           <Text style={styles.sectionName}>Your Friends are Reading</Text>
           <FlatList
             data={DATA}    
-            renderItem={({item}) => <View backgroundColor='red' style={styles.recommendedItem}></View>}
+            renderItem={({item}) => <View backgroundColor='black' style={styles.recommendedItem}></View>}
             keyExtractor={item => item.id}
             horizontal={true}
             style={styles.recommended}

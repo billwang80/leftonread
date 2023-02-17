@@ -1,6 +1,6 @@
 import React from 'react';
-import {Text, FlatList, View, StyleSheet, SafeAreaView, Image} from 'react-native'
-import {AirbnbRating} from '@rneui/themed';
+import {Text, FlatList, View, StyleSheet, SafeAreaView} from 'react-native'
+import {AirbnbRating, Image} from '@rneui/themed';
 
 const DATA = [
     {
@@ -11,7 +11,7 @@ const DATA = [
         type: 'review',
         date: '1/10/2023',
         rating: 4,
-        extra: 'Excellent book, should be required reading in school',
+        extra: 'Excellent book, should be required reading in school.',
     },
     {
         profile: 'https://media.licdn.com/dms/image/D5603AQHmpUkfETNpwQ/profile-displayphoto-shrink_800_800/0/1669596480163?e=1681948800&v=beta&t=cqIpNnDU3tllZw32g_wjooZzaG2XBSN2Ur2OlHp6Rbc',
@@ -21,7 +21,7 @@ const DATA = [
         type: 'review',
         date: '1/1/2023',
         rating: 5,
-        extra: 'Beautiful world-building and storyteeling. Would read this again and again and again,',
+        extra: 'Beautiful world-building and storytelling. Would read this again and again and again.',
     },
     {
         profile: 'https://media.licdn.com/dms/image/D5603AQHmpUkfETNpwQ/profile-displayphoto-shrink_800_800/0/1669596480163?e=1681948800&v=beta&t=cqIpNnDU3tllZw32g_wjooZzaG2XBSN2Ur2OlHp6Rbc',
@@ -64,15 +64,21 @@ function Feed() {
                                 <Text style={styles.date}>{`${getTimeDifference(item.date)} days ago`}</Text>
                             </View>
                             <Text style={styles.bookTitle}>{`${item.title} `} <Text style={styles.authorName}>{`by ${item.author}`}</Text></Text>
-                            {item.type === 'review' ? <AirbnbRating 
+                            {item.type === 'review' ? 
+                            <AirbnbRating 
                                 isDisabled={true} 
                                 count={item.rating} 
                                 defaultRating={item.rating} 
                                 showRating={false} 
                                 selectedColor='#2c6c54' 
                                 size={20}
-                            />: null}
-                            <View style={styles.book}/>
+                            /> : null}
+                            <View style={styles.bookContent}>
+                                <View style={styles.book}/>
+                                <View style={styles.extra}>
+                                    <Text>{item.extra}</Text>
+                                </View>
+                            </View>                         
                         </View>
                     </View>
                 )}
@@ -135,6 +141,17 @@ const styles = StyleSheet.create({
         marginLeft: 'auto',
         color: '#828282',
         fontSize: 12,
+    },
+    bookContent: {
+        flex: 1,
+        flexDirection: 'row',
+    },
+    extra: {
+        flex: 1,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        marginTop: 10,
+        marginLeft: 10,
     }
 })
 

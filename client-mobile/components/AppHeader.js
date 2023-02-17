@@ -1,8 +1,8 @@
 import React from 'react';
-import {Text, StyleSheet, View, Image} from 'react-native'
-import {Icon} from '@rneui/themed';
+import {Text, StyleSheet, View} from 'react-native'
+import {Icon, Image} from '@rneui/themed';
 
-const IMAGE_URI = 'https://scontent-yyz1-1.xx.fbcdn.net/v/t39.30808-6/287743666_2675525765925777_631930729363776009_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=bJvb7Gxp_gEAX-9ISzk&_nc_ht=scontent-yyz1-1.xx&oh=00_AfDPmitdVlGOI45G1shcCk3mxTxwE_WKoz4tKm77xO3VUA&oe=63F2D9A9'
+const IMAGE_URI =  'https://media.licdn.com/dms/image/C5603AQFj6oNhrUEycg/profile-displayphoto-shrink_800_800/0/1636739777705?e=1681948800&v=beta&t=PTXRkY3BGoUMfbB7U2Dcnroi4_qxeFESikMEEmo7KMw'
 
 function AppHeader({navigation}) {
   return (
@@ -22,6 +22,9 @@ function AppHeader({navigation}) {
             <Image
               source={{ uri: IMAGE_URI }}
               style={styles.image}
+              onPress={() => 
+                navigation.navigate('Profile')
+              } 
             />
             </View>
           </View>
