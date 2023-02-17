@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StyleSheet, Text, FlatList, SafeAreaView, View, ScrollView, StatusBar } from 'react-native';
-import AppFooter from './AppFooter'
+import AppFooter from './AppFooter';
 
 function Home({navigation}) {
   const DATA = []
@@ -38,7 +38,7 @@ function Home({navigation}) {
             style={styles.recommended}
           />
         </ScrollView>
-        <AppFooter />
+        <AppFooter navigation={navigation}/>
       </SafeAreaView>
     </SafeAreaProvider>
   );

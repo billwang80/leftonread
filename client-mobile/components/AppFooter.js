@@ -1,23 +1,33 @@
 import React from 'react';
-import {Text, View, StyleSheet} from 'react-native'
-import { Header, Image, Icon } from '@rneui/themed';
+import {Text, View, StyleSheet, TouchableHighlight} from 'react-native'
+import {Icon } from '@rneui/themed';
 
-function AppFooter() {
+function AppFooter({navigation}) {
   return (
     <View style={styles.container}>
         <View style={styles.main}>
-            <View>
-                <Icon name='home'color= 'black'/>
-                <Text>Home</Text>
-            </View>
-            <View>
-                <Icon name='book'color= 'black'/>
-                <Text>Books</Text>
-            </View>
-            <View>
-                <Icon type='font-awesome-5' name='wave-square' color= 'black'/>
-                <Text>Feed</Text>
-            </View>
+            <TouchableHighlight>
+                <View>
+                    <Icon name='home'color= 'black'/>
+                    <Text>Home</Text>
+                </View>
+            </TouchableHighlight>
+            <TouchableHighlight>
+                <View>
+                    <Icon name='book'color= 'black'/>
+                    <Text>Books</Text>
+                </View>
+            </TouchableHighlight>
+            <TouchableHighlight onPress={() => navigation.navigate('Feed')}>
+                <View>
+                    <Icon 
+                        type='font-awesome-5' 
+                        name='wave-square' 
+                        color= 'black' 
+                    />
+                    <Text>Feed</Text>
+                </View>
+            </TouchableHighlight>
         </View>
     </View>
   );
