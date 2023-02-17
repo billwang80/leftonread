@@ -7,6 +7,7 @@ import Search from './components/Search';
 import AppHeader from './components/AppHeader';
 import Feed from './components/Feed';
 import Profile from './components/Profile';
+import Book from './components/Book';
 
 const Stack = createNativeStackNavigator();
 const styles = StyleSheet.create({
@@ -38,6 +39,11 @@ export default function App() {
         <Stack.Screen
           name="Profile"
           component={Profile}
+          options={{headerTitleStyle: styles.searchHeaderTitle, headerShadowVisible: false}}
+        />
+        <Stack.Screen
+          name="Book"
+          component={Book}
           options={{headerTitleStyle: styles.searchHeaderTitle, headerShadowVisible: false}}
         />
       </Stack.Navigator>

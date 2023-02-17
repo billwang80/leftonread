@@ -12,6 +12,7 @@ const DATA = [
         date: '1/10/2023',
         rating: 4,
         extra: 'Excellent book, should be required reading in school.',
+        imageURI: 'https://cdn.penguin.co.uk/dam-assets/books/9780241281901/9780241281901-jacket-large.jpg',
     },
     {
         profile: 'https://media.licdn.com/dms/image/D5603AQHmpUkfETNpwQ/profile-displayphoto-shrink_800_800/0/1669596480163?e=1681948800&v=beta&t=cqIpNnDU3tllZw32g_wjooZzaG2XBSN2Ur2OlHp6Rbc',
@@ -22,6 +23,7 @@ const DATA = [
         date: '1/1/2023',
         rating: 5,
         extra: 'Beautiful world-building and storytelling. Would read this again and again and again.',
+        imageURI: 'https://m.media-amazon.com/images/I/41q1alpbmuL._SY264_BO1,204,203,200_QL40_ML2_.jpg',
     },
     {
         profile: 'https://media.licdn.com/dms/image/D5603AQHmpUkfETNpwQ/profile-displayphoto-shrink_800_800/0/1669596480163?e=1681948800&v=beta&t=cqIpNnDU3tllZw32g_wjooZzaG2XBSN2Ur2OlHp6Rbc',
@@ -32,6 +34,7 @@ const DATA = [
         date: '2/10/2023',
         rating: 5,
         extra: '',
+        imageURI: 'https://m.media-amazon.com/images/I/41weOaDmFwL._AC_UY218_.jpg',
     },
 ]
 
@@ -74,7 +77,10 @@ function Feed() {
                                 size={20}
                             /> : null}
                             <View style={styles.bookContent}>
-                                <View style={styles.book}/>
+                            <Image 
+                                source={{uri: item.imageURI}} 
+                                style={styles.book}    
+                            />
                                 <View style={styles.extra}>
                                     <Text>{item.extra}</Text>
                                 </View>
@@ -115,7 +121,6 @@ const styles = StyleSheet.create({
     book: {
         height: 150,
         width: 100,
-        backgroundColor: 'black',
         marginTop: 10,
     },
     postTitle: {

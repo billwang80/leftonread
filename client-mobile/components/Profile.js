@@ -10,7 +10,18 @@ const DATA = {
         readingGoal: 24,
         booksRead: 19,
     }
-const Fill = [1,2,3]
+
+const READING = [
+    {
+        uri: 'https://cdn.penguin.co.uk/dam-assets/books/9781784870140/9781784870140-jacket-large.jpg',
+    },
+    {
+        uri: 'https://cdn.penguin.co.uk/dam-assets/books/9780141040387/9780141040387-jacket-large.jpg',
+    },
+    {
+        uri: 'https://cdn.penguin.co.uk/dam-assets/books/9780141181479/9780141181479-jacket-large.jpg',
+    },
+]
 
 function Profile() {
     return (
@@ -40,8 +51,11 @@ function Profile() {
             <View style={styles.readingNowContainer}>
                 <Text style={styles.readingNowTitle}>Reading Now</Text>
                 <FlatList
-                    data={Fill}    
-                    renderItem={({item}) => <View backgroundColor='black' style={styles.book}></View>}
+                    data={READING}    
+                    renderItem={({item}) => <Image 
+                    source={{uri: item.uri}} 
+                    style={styles.book}    
+                />}
                     keyExtractor={item => item.id}
                     horizontal={true}
                     style={styles.recommended}
