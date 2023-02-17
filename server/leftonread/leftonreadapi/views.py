@@ -6,7 +6,12 @@ from rest_framework import permissions
 from django.contrib.auth.models import User
 from .models import Book, Profile, Friendship
 
-from .serializers import BookSerializer, UserSerializer, ProfileSerializer
+from .serializers import MyTokenObtainPairSerializer, BookSerializer, UserSerializer, ProfileSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+class MyObtainTokenPairView(TokenObtainPairView):
+  permission_classes = (permissions.AllowAny,)
+  serializer_class = MyTokenObtainPairSerializer
 
 class BookApiView(APIView): # may be useless
 

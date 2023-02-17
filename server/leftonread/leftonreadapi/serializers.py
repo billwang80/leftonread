@@ -1,7 +1,16 @@
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.models import User
 
 from .models import Profile, Book
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+  @classmethod
+  def get_token(cls, user):
+    token = super(MyTokenObtainPairSerializer, cls).get_token(user)
+
+    token['username'] = user.username
+    return token
 
 class BookSerializer(serializers.ModelSerializer):
   # users = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
@@ -25,4 +34,3 @@ class ProfileSerializer(serializers.ModelSerializer):
   class Meta:
     model = Profile
     fields = ('user', 'friends')
-
