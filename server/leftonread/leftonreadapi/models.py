@@ -2,10 +2,58 @@ from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 
 from datetime import date
 
-# Create your models here.
+# https://docs.djangoproject.com/en/dev/topics/auth/customizing/#extending-the-existing-user-model
+class Profile(models.Model):
+  user = models.OneToOneField(User, on_delete=models.CASCADE)
+  phone_number = models.CharField(max_length=32, default="", blank=True)
+  friends = models.ManyToManyField("self", through='Friendship', symmetrical=True, blank=True)
+
+# https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+  if created:
+    Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+  instance.profile.save()
+  
+class Friendship(models.Model): # designed for undirected friendship
+  user1 = models.ForeignKey(
+    'Profile',
+    related_name='user2',
+    on_delete=models.CASCADE,
+  )
+  user2 = models.ForeignKey(
+    'Profile',
+    related_name='user1',
+    on_delete=models.CASCADE,
+  )
+  date_created = models.DateField(null=True, blank=True)
+
+# https://groups.google.com/g/django-users/c/8xqiSDok2JA?pli=1
+@receiver(post_save, sender=Friendship)
+def create_friendship(sender, instance, created, **kwargs):
+  if created:
+    sender.objects.get_or_create(
+      user1=instance.user2,
+      user2=instance.user1,
+      date_created=instance.date_created
+    )
+
+@receiver(post_delete, sender=Friendship)
+def delete_friendship(sender, instance, **kwargs):
+  sender.objects.filter(
+    user1=instance.user2,
+    user2=instance.user1
+  ).delete()
+
+
 class Book(models.Model):
 
   class Difficulty(models.TextChoices):
@@ -13,20 +61,20 @@ class Book(models.Model):
     MEDIUM = 'M', _('Medium')
     HARD = 'H', _('Hard')
 
-  title = models.CharField(max_length=60, default="")
-  author = models.CharField(max_length=60, default="")
-  country = models.CharField(max_length=60, default="")
-  language = models.CharField(max_length=60, default="")
+  title = models.CharField(max_length=100, default="", blank=True)
+  author = models.CharField(max_length=60, default="", blank=True)
+  country = models.CharField(max_length=60, default="", blank=True)
+  language = models.CharField(max_length=2, default="", blank=True)
   word_count = models.IntegerField(null=True, blank=True)
   difficulty = models.CharField(
     max_length=1, 
     choices=Difficulty.choices,
     default=Difficulty.EASY,
   )
-  cover_image_url = models.URLField(max_length=200, default="")
+  cover_image_url = models.URLField(max_length=200, default="", blank=True)
   popularity = models.IntegerField(null=True, blank=True) # need further discussion -> maybe number of users reading 
-  date_written = models.DateField(null=True, blank=True)
-  description = models.CharField(max_length=2000, default="")
+  publish_date = models.DateField(null=True, blank=True) # this will only be year
+  description = models.CharField(max_length=2000, default="", blank=True)
   users = models.ManyToManyField(User, related_name='books', through='UserBookRelation', blank=True)
 
 class UserBookRelation(models.Model):
@@ -36,12 +84,12 @@ class UserBookRelation(models.Model):
     TOREAD = 'TR', _('To Read')
     COMPLETE = 'CO', _('Completed')
 
-  user_id = models.ForeignKey(
+  user = models.ForeignKey(
     settings.AUTH_USER_MODEL,
     on_delete=models.CASCADE,
   )
-  book_id = models.ForeignKey(
-    "Book",
+  book = models.ForeignKey(
+    'Book',
     on_delete=models.CASCADE,
   )
   progress = models.CharField(
@@ -52,44 +100,25 @@ class UserBookRelation(models.Model):
   start_date = models.DateField(null=True, blank=True)
   date_completed = models.DateField(null=True, blank=True)
 
-
-# we can combine userbookcompleted and userbookreading and plantoread
-# class UserBookCompleted(models.Model):
-#   user_id = models.ForeignKey(
-#     settings.AUTH_USER_MODEL,
-#     on_delete=models.CASCADE,
-#   )
-#   book_id = models.ForeignKey(
-#     "Book",
-#     on_delete=models.CASCADE,
-#   )
-#   date_completed = models.DateField(default=date.today)
-
-# class UserBookReading(models.Model):
-#   user_id = models.ForeignKey(
-#     settings.AUTH_USER_MODEL,
-#     on_delete=models.CASCADE,
-#   )
-#   book_id = models.ForeignKey(
-#     "Book",
-#     on_delete=models.CASCADE,
-#   )
-#   start_date = models.DateField(default=date.today)
-
-# class UserBookToRead(models.Model):
-#   user_id = models.ForeignKey(
-#     settings.AUTH_USER_MODEL,
-#     on_delete=models.CASCADE,
-#   )
-#   book_id = models.ForeignKey(
-#     "Book",
-#     on_delete=models.CASCADE,
-#   )
-
-# possibly combine genre and time period into tags? -> # class BookTag() # relationship table for books and tags
 class Genre(models.Model):
-  genre_name = models.CharField(max_length=60, default="")
+
+  class GenreOption(models.TextChoices):
+    ADVENTURE = 'ADV', _('Adventure')
+    MYSTERY = 'MYS', _('Mystery')
+    FANTASY = 'FAN', _('Fantasy')
+    THRILLER = 'THR', _('Thriller')
+    ROMANCE = 'ROM', _('Romance')
+    SCIFI = 'SCF', _('Sci-Fi')
+    DYSTOPIAN = 'DYS', _('Dystopian')
+    CONTEMPORARY = 'CON', _('Contemporary')
+
+  genre_name = models.CharField(
+    max_length=3, 
+    choices=GenreOption.choices,
+    null=True,
+    blank=True,
+  )
+  models.ManyToManyField(Book, related_name='genres', blank=True)
 
 class TimePeriod(models.Model):
   time_period_name = models.CharField(max_length=60, default="")
-
