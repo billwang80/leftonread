@@ -4,20 +4,25 @@ from rest_framework import status
 from rest_framework import permissions
 
 from django.contrib.auth.models import User
-from .models import Book, Profile, Friendship
+from .models import Book, Profile, Friendship, Genre
 
 from .serializers import MyTokenObtainPairSerializer, BookSerializer, UserSerializer, ProfileSerializer, RegisterSerializer
 from rest_framework import generics
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-class RegisterView(generics.CreateAPIView):
-  queryset = User.objects.all()
-  permission_classes = (AllowAny,)
-  serializer_class = RegisterSerializer
+class BookByUserGenre(APIView):
 
-class MyObtainTokenPairView(TokenObtainPairView):
-  permission_classes = (permissions.AllowAny,)
-  serializer_class = MyTokenObtainPairSerializer
+  def get(self, request, *args, **kwargs):
+    '''
+    Get recommended books by genre of userId
+    '''
+    user_id = kwargs.get('user_id', request.user.id)
+    genres = Genre.objects.filter(users=user_id)
+    # genre_list_ids = 
+    books = Book.objects.filter(genres__in=genres)
+
+    book_serializer = BookSerializer(books, many=True)
+    return Response(book_serializer.data, status=status.HTTP_200_OK)
 
 class BookApiView(APIView): # may be useless
 
@@ -76,3 +81,12 @@ class ListFriends(APIView):
     users = Profile.objects.filter(friends=user_id)
     serializer = ProfileSerializer(users, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+class RegisterView(generics.CreateAPIView):
+  queryset = User.objects.all()
+  permission_classes = (permissions.AllowAny,)
+  serializer_class = RegisterSerializer
+
+class MyObtainTokenPairView(TokenObtainPairView):
+  permission_classes = (permissions.AllowAny,)
+  serializer_class = MyTokenObtainPairSerializer

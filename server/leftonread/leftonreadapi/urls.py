@@ -4,6 +4,7 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from .views import (
   BookListByUserApiView,
   UserListByBookApiView,
+  BookByUserGenre,
   ListFriends,
   MyObtainTokenPairView,
   RegisterView,
@@ -20,5 +21,6 @@ urlpatterns = [
   path('books-by-user/', BookListByUserApiView.as_view()),
   path('books-by-user/<int:user_id>/', BookListByUserApiView.as_view()),
   path('users-by-book/<int:book_id>/', UserListByBookApiView.as_view()),
+  path('genre-recommend/<int:user_id>', BookByUserGenre.as_view()),
   path('friends/<int:user_id>/', ListFriends.as_view()),
 ]

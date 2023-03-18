@@ -55,7 +55,6 @@ def delete_friendship(sender, instance, **kwargs):
 
 
 class Book(models.Model):
-
   class Difficulty(models.TextChoices):
     EASY = 'E', _('Easy')
     MEDIUM = 'M', _('Medium')
@@ -72,13 +71,13 @@ class Book(models.Model):
     default=Difficulty.EASY,
   )
   cover_image_url = models.URLField(max_length=200, default="", blank=True)
+  book_available_url = models.URLField(max_length=200, default="", blank=True)
   popularity = models.IntegerField(null=True, blank=True) # need further discussion -> maybe number of users reading 
   publish_date = models.DateField(null=True, blank=True) # this will only be year
   description = models.CharField(max_length=2000, default="", blank=True)
   users = models.ManyToManyField(User, related_name='books', through='UserBookRelation', blank=True)
 
 class UserBookRelation(models.Model):
-  
   class Progress(models.TextChoices):
     READING = 'RE', _('Reading')
     TOREAD = 'TR', _('To Read')
@@ -101,7 +100,6 @@ class UserBookRelation(models.Model):
   date_completed = models.DateField(null=True, blank=True)
 
 class Genre(models.Model):
-
   class GenreOption(models.TextChoices):
     ADVENTURE = 'ADV', _('Adventure')
     MYSTERY = 'MYS', _('Mystery')
@@ -118,7 +116,8 @@ class Genre(models.Model):
     null=True,
     blank=True,
   )
-  models.ManyToManyField(Book, related_name='genres', blank=True)
+  books = models.ManyToManyField(Book, related_name='genres', blank=True)
+  users = models.ManyToManyField(Profile, related_name='genres', blank=True)
 
 class TimePeriod(models.Model):
   time_period_name = models.CharField(max_length=60, default="")
