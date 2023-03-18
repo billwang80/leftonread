@@ -53,7 +53,6 @@ def delete_friendship(sender, instance, **kwargs):
     user2=instance.user1
   ).delete()
 
-
 class Book(models.Model):
   class Difficulty(models.TextChoices):
     EASY = 'E', _('Easy')
