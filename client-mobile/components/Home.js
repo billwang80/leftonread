@@ -92,7 +92,7 @@ function Home({ navigation }) {
                 onPress={() => navigation.navigate("Book")}
               />
             )}
-            keyExtractor={(item, index) => item + index}
+            keyExtractor={(item) => item.uri}
             horizontal={true}
             style={styles.recommended}
           />

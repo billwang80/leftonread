@@ -234,7 +234,7 @@ function Profile() {
         <View style={styles.reviewsContainer}>
           <Text style={styles.sectionHeader}>Reviews</Text>
           {REVIEWS.map((item) => (
-            <View style={styles.post} key={item.uri}>
+            <View style={styles.post} key={item.imageURI}>
               <View style={styles.postMain}>
                 <View style={styles.postTitle}>
                   <Text style={styles.date}>{`${getTimeDifference(
