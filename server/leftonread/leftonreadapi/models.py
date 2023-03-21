@@ -1,8 +1,10 @@
 from django.db import models
+from django.db.models.functions import Coalesce
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save, post_delete
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.dispatch import receiver
 
 from datetime import date
@@ -53,7 +55,6 @@ def delete_friendship(sender, instance, **kwargs):
     user2=instance.user1
   ).delete()
 
-
 class Book(models.Model):
   class Difficulty(models.TextChoices):
     EASY = 'E', _('Easy')
@@ -77,6 +78,11 @@ class Book(models.Model):
   description = models.CharField(max_length=2000, default="", blank=True)
   users = models.ManyToManyField(User, related_name='books', through='UserBookRelation', blank=True)
 
+  def avg_rating(self):
+    return Review.objects.filter(book=self).aggregate(
+      avg=Coalesce(models.Avg('rating'), 0.0),
+    )['avg']
+
 class UserBookRelation(models.Model):
   class Progress(models.TextChoices):
     READING = 'RE', _('Reading')
@@ -98,6 +104,24 @@ class UserBookRelation(models.Model):
   )
   start_date = models.DateField(null=True, blank=True)
   date_completed = models.DateField(null=True, blank=True)
+
+class Review(models.Model):
+  user = models.ForeignKey(
+    settings.AUTH_USER_MODEL,
+    on_delete=models.CASCADE,
+  )
+  book = models.ForeignKey(
+    'Book',
+    on_delete=models.CASCADE,
+  )
+  review_date = models.DateField(null=True, blank=True)
+  rating = models.IntegerField(
+    validators=[
+      MaxValueValidator(5),
+      MinValueValidator(1)
+    ]
+  )
+  review_text = models.TextField(blank=True)
 
 class Genre(models.Model):
   class GenreOption(models.TextChoices):
