@@ -9,14 +9,20 @@ from .models import Profile, Book, Genre, Review
 class GenreSerializer(serializers.ModelSerializer):
   class Meta:
     model = Genre
-    field = ('genre_name')
+    fields = ('genre_name',)
 
 class BookSerializer(serializers.ModelSerializer):
   # users = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
+  genres = GenreSerializer(many=True, read_only=True)
+  # genres = serializers.CharField(source='genre.genre_name')
 
   class Meta:
     model = Book
-    fields = ('title', 'author', 'country', 'language', 'word_count', 'difficulty', 'cover_image_url', 'avg_rating', 'publish_date', 'description')
+    fields = (
+      'title', 'author', 'country', 'language', 'word_count', 'difficulty', 
+      'cover_image_url', 'avg_rating', 'publish_date', 'amazon_url', 'audible_url', 
+      'kindle_url', 'description', 'genres'
+    )
 
 class UserSerializer(serializers.ModelSerializer):
   # books = BookSerializer(many=True, read_only=True)
@@ -28,9 +34,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 class ReviewSerializer(serializers.ModelSerializer):
   user = UserSerializer()
+  book = BookSerializer()
+
   class Meta:
     model = Review
-    fields = ('rating', 'review_date', 'review_text', 'user')
+    fields = ('rating', 'review_date', 'review_text', 'user', 'book')
 
 class ProfileSerializer(serializers.ModelSerializer):
   user = UserSerializer()
@@ -38,7 +46,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Profile
-    fields = ('user', 'friends')
+    fields = ('user', 'profile_picture', 'friends')
 
 class RegisterSerializer(serializers.ModelSerializer):
   email = serializers.EmailField(

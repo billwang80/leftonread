@@ -14,6 +14,7 @@ class Profile(models.Model):
   user = models.OneToOneField(User, on_delete=models.CASCADE)
   phone_number = models.CharField(max_length=32, default="", blank=True)
   friends = models.ManyToManyField("self", through='Friendship', symmetrical=True, blank=True)
+  profile_picture_url = models.URLField(max_length=200, default="", blank=True)
 
 # https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
 @receiver(post_save, sender=User)
@@ -72,7 +73,10 @@ class Book(models.Model):
     default=Difficulty.EASY,
   )
   cover_image_url = models.URLField(max_length=200, default="", blank=True)
-  book_available_url = models.URLField(max_length=200, default="", blank=True)
+  # where to buy urls
+  amazon_url = models.URLField(max_length=200, default="", blank=True)
+  audible_url = models.URLField(max_length=200, default="", blank=True)
+  kindle_url = models.URLField(max_length=200, default="", blank=True)
   popularity = models.IntegerField(null=True, blank=True) # need further discussion -> maybe number of users reading 
   publish_date = models.DateField(null=True, blank=True) # this will only be year
   description = models.CharField(max_length=2000, default="", blank=True)
