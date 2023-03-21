@@ -8,7 +8,8 @@ from .models import Book, Profile, Friendship, Genre, Review
 
 from .serializers import (
   MyTokenObtainPairSerializer, 
-  BookSerializer, UserSerializer, 
+  BookSerializer, 
+  UserSerializer, 
   ProfileSerializer, 
   RegisterSerializer,
   ReviewSerializer
@@ -24,10 +25,32 @@ Need:
 - Get recommended books for users (genre) /
 - Get reviews of a book /
 - Get users profile x
-- Get reviews from author x
-- Get all reviews from friends x
+- Get reviews from author /
+- Get all reviews from friends /
+- Write review x
 - Reading goal -> number of books in year x
 '''
+
+class FriendReviews(APIView):
+  def get(self, request, *args, **kwargs):
+    '''
+    Get reviews written by friends of userId
+    '''
+    user_id = kwargs.get('user_id')
+    friends = User.objects.filter(profile__in=Profile.objects.filter(friends=user_id))
+    reviews = Review.objects.filter(user__in=friends)
+    review_serializer = ReviewSerializer(reviews, many=True)
+    return Response(review_serializer.data, status=status.HTTP_200_OK)
+
+class AuthorReviews(APIView):
+  def get(self, request, *args, **kwargs):
+    '''
+    Get the reviews written by userId
+    '''
+    user_id = kwargs.get('user_id')
+    reviews = Review.objects.filter(user=user_id)
+    review_serializer = ReviewSerializer(reviews, many=True)
+    return Response(review_serializer.data, status=status.HTTP_200_OK)
 
 class BookReview(APIView):
   def get(self, request, *args, **kwargs):
@@ -38,6 +61,26 @@ class BookReview(APIView):
     reviews = Review.objects.filter(book=book_id)
     review_serializer = ReviewSerializer(reviews, many=True)
     return Response(review_serializer.data, status=status.HTTP_200_OK)
+
+class ProfileView(APIView):
+  def get(self, request, *args, **kwargs):
+    '''
+    Get profile by user_id
+    '''
+    user_id = kwargs.get('user_id')
+    profile = Profile.objects.get(user=user_id)
+    serializer = ProfileSerializer(profile)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+# may be useless
+class BookApiView(APIView): 
+  def get(self, request, *args, **kwargs):
+    '''
+    Get book by ID
+    '''
+    book = Book.objects.get(id=kwargs.get('book_id')).first()
+    serializer = BookSerializer(book)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 class BookByUserGenre(APIView):
   def get(self, request, *args, **kwargs):
@@ -50,16 +93,6 @@ class BookByUserGenre(APIView):
 
     book_serializer = BookSerializer(books, many=True)
     return Response(book_serializer.data, status=status.HTTP_200_OK)
-
-class BookApiView(APIView): # may be useless
-
-  def get(self, request, *args, **kwargs):
-    '''
-    Get book by ID
-    '''
-    book = Book.objects.get(id=kwargs.get('book_id')).first()
-    serializer = BookSerializer(book)
-    return Response(serializer.data, status=status.HTTP_200_OK)
 
 class BookListByUserApiView(APIView):
   # add permission to check if user is auth
@@ -81,7 +114,6 @@ class BookListByUserApiView(APIView):
     return Response(data, status=status.HTTP_200_OK)
 
 class UserListByBookApiView(APIView):
-
   def get(self, request, *args, **kwargs):
     '''
     List all users from the requested book
@@ -99,7 +131,6 @@ class UserListByBookApiView(APIView):
 
 # https://stackoverflow.com/questions/6567831/how-to-perform-or-condition-in-django-queryset
 class ListFriends(APIView):
-
   def get(self, request, *args, **kwargs):
     '''
     List friends of user by user Id
