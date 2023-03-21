@@ -4,21 +4,48 @@ from rest_framework import status
 from rest_framework import permissions
 
 from django.contrib.auth.models import User
-from .models import Book, Profile, Friendship, Genre
+from .models import Book, Profile, Friendship, Genre, Review
 
-from .serializers import MyTokenObtainPairSerializer, BookSerializer, UserSerializer, ProfileSerializer, RegisterSerializer
+from .serializers import (
+  MyTokenObtainPairSerializer, 
+  BookSerializer, UserSerializer, 
+  ProfileSerializer, 
+  RegisterSerializer,
+  ReviewSerializer
+)
 from rest_framework import generics
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-class BookByUserGenre(APIView):
+'''
+Need:
+- Get friends by userId /
+- Get users reading book /
+- Get books on user's list /
+- Get recommended books for users (genre) /
+- Get reviews of a book /
+- Get users profile x
+- Get reviews from author x
+- Get all reviews from friends x
+- Reading goal -> number of books in year x
+'''
 
+class BookReview(APIView):
+  def get(self, request, *args, **kwargs):
+    '''
+    Get the reviews of a book by book_id
+    '''
+    book_id = kwargs.get('book_id')
+    reviews = Review.objects.filter(book=book_id)
+    review_serializer = ReviewSerializer(reviews, many=True)
+    return Response(review_serializer.data, status=status.HTTP_200_OK)
+
+class BookByUserGenre(APIView):
   def get(self, request, *args, **kwargs):
     '''
     Get recommended books by genre of userId
     '''
     user_id = kwargs.get('user_id', request.user.id)
     genres = Genre.objects.filter(users=user_id)
-    # genre_list_ids = 
     books = Book.objects.filter(genres__in=genres)
 
     book_serializer = BookSerializer(books, many=True)

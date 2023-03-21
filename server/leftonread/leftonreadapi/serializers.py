@@ -4,7 +4,7 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.validators import UniqueValidator
 
-from .models import Profile, Book, Genre
+from .models import Profile, Book, Genre, Review
 
 class GenreSerializer(serializers.ModelSerializer):
   class Meta:
@@ -16,7 +16,7 @@ class BookSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Book
-    fields = ('title', 'author', 'country', 'language', 'word_count', 'difficulty', 'cover_image_url', 'popularity', 'publish_date', 'description')
+    fields = ('title', 'author', 'country', 'language', 'word_count', 'difficulty', 'cover_image_url', 'avg_rating', 'publish_date', 'description')
 
 class UserSerializer(serializers.ModelSerializer):
   # books = BookSerializer(many=True, read_only=True)
@@ -25,6 +25,12 @@ class UserSerializer(serializers.ModelSerializer):
   class Meta:
     model = User
     fields = ('id', 'username', 'email', 'first_name', 'last_name', 'phone_number')
+
+class ReviewSerializer(serializers.ModelSerializer):
+  user = UserSerializer()
+  class Meta:
+    model = Review
+    fields = ('rating', 'review_date', 'review_text', 'user')
 
 class ProfileSerializer(serializers.ModelSerializer):
   user = UserSerializer()
