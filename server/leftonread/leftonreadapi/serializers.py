@@ -33,8 +33,8 @@ class UserSerializer(serializers.ModelSerializer):
     fields = ('id', 'username', 'email', 'first_name', 'last_name', 'phone_number')
 
 class ReviewSerializer(serializers.ModelSerializer):
-  user = UserSerializer()
-  book = BookSerializer()
+  # user = UserSerializer()
+  # book = BookSerializer()
 
   class Meta:
     model = Review

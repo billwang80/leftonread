@@ -9,6 +9,7 @@ from .views import (
   BookReview,
   AuthorReviews,
   FriendReviews,
+  PostReview,
   ListFriends,
   ProfileView,
   MyObtainTokenPairView,
@@ -19,6 +20,7 @@ from .views import (
 urlpatterns = [
   # path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
   # auth
+  # https://stackoverflow.com/questions/30739352/django-rest-framework-token-authentication-logout
   path('login/', MyObtainTokenPairView.as_view(), name='token_obtain_pair'),
   path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
   path('register/', RegisterView.as_view(), name='auth_register'),
@@ -32,6 +34,7 @@ urlpatterns = [
   path('reviews/<int:book_id>/', BookReview.as_view()),
   path('user-reviews/<int:user_id>/', AuthorReviews.as_view()),
   path('friend-reviews/<int:user_id>/', FriendReviews.as_view()),
+  path('reviews/', PostReview.as_view()),
   path('genre-recommend/<int:user_id>/', BookByUserGenre.as_view()),
   path('friends/<int:user_id>/', ListFriends.as_view()),
 ]

@@ -19,18 +19,45 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 '''
 Need:
+- Register account /
+- Refresh token /
 - Get friends by userId /
 - Get users reading book /
 - Get all books x
 - Get books on user's list /
 - Get recommended books for users (genre) /
 - Get reviews of a book /
-- Get users profile x
+- Get users profile /
 - Get reviews from author /
 - Get all reviews from friends /
-- Write review x
-- Reading goal -> number of books in year x
+- Write review /
+- Select favourite genres x
+- Create reading progression x
+- Get reading goal -> number of books in year x
+- Create reading goal x
 '''
+
+class PostReview(APIView):
+  permission_classes = [permissions.IsAuthenticated]
+
+  def post(self, request, *args, **kwargs):
+    user_id = request.user.id
+    book_id = request.data.get('book')
+
+    if Review.objects.filter(user=user_id, book=book_id).exists():
+      return Response("You already made a review for this book", status.HTTP_400_BAD_REQUEST)
+
+    data = {
+      'rating': request.data.get('rating'),
+      'review_text': request.data.get('review_text'),
+      'user': user_id,
+      'book': book_id
+    }
+    serializer = ReviewSerializer(data=data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class FriendReviews(APIView):
   def get(self, request, *args, **kwargs):
