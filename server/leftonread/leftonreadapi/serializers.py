@@ -33,8 +33,8 @@ class UserSerializer(serializers.ModelSerializer):
     fields = ('id', 'username', 'email', 'first_name', 'last_name', 'phone_number')
 
 class ReviewSerializer(serializers.ModelSerializer):
-  user = UserSerializer()
-  book = BookSerializer()
+  # user = UserSerializer()
+  # book = BookSerializer()
 
   class Meta:
     model = Review
@@ -46,7 +46,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Profile
-    fields = ('user', 'profile_picture', 'friends')
+    fields = ('user', 'profile_picture_url', 'friends')
 
 class RegisterSerializer(serializers.ModelSerializer):
   email = serializers.EmailField(
