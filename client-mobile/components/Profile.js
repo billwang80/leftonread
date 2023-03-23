@@ -10,6 +10,7 @@ import {
 import { Image, AirbnbRating, SafeAreaProvider } from "@rneui/themed";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import { getTimeDifference } from "./Feed";
+import contentImage from "./contentImage";
 
 const styles = StyleSheet.create({
   container: {
