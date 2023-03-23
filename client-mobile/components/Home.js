@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import {
   StyleSheet,
@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import { Image } from "@rneui/themed";
 import AppFooter from "./AppFooter";
+import BookImage from "./BookImage";
+//import { recommended } from "../constants";
 
 const styles = StyleSheet.create({
   container: {
@@ -50,6 +52,8 @@ const styles = StyleSheet.create({
 });
 
 function Home({ navigation }) {
+  const allBooks = "http://10.101.189.7:8000/books/";
+  const recommendedURL = "http://10.101.189.7:8000/genre-recommend/1/";
   const DATA = [
     { uri: "https://m.media-amazon.com/images/I/51lyOfcaA8L.jpg" },
     { uri: "https://m.media-amazon.com/images/I/51E7yd+G-cL.jpg" },
@@ -77,6 +81,20 @@ function Home({ navigation }) {
     },
   ];
 
+  const [recommended, setRecommended] = useState([]);
+  const [popular, setPopular] = useState([]);
+
+  useEffect(() => {
+    fetch(recommendedURL)
+      .then((response) => response.json())
+      .then((data) => setRecommended(data));
+    fetch(allBooks)
+      .then((response) => response.json())
+      .then((data) =>
+        setPopular(data.sort((a, b) => a.popularity - b.popularity))
+      );
+  }, []);
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
@@ -84,15 +102,11 @@ function Home({ navigation }) {
         <ScrollView style={styles.main}>
           <Text style={styles.sectionName}>Recommended</Text>
           <FlatList
-            data={DATA}
+            data={recommended}
             renderItem={({ item }) => (
-              <Image
-                source={{ uri: item.uri }}
-                style={styles.recommendedItem}
-                onPress={() => navigation.navigate("Book")}
-              />
+              <BookImage book={item} navigation={navigation} />
             )}
-            keyExtractor={(item) => item.uri}
+            keyExtractor={(book) => book.cover_image_url}
             horizontal={true}
             style={styles.recommended}
           />

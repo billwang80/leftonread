@@ -96,7 +96,7 @@ const DATA = [];
 for (let i = 0; i < 3; i++) {
   DATA.push({ uri: "https://m.media-amazon.com/images/I/51lyOfcaA8L.jpg" });
 }
-function Book() {
+function Book({ book }) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
