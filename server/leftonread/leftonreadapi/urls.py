@@ -2,6 +2,7 @@ from django.conf.urls import url
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenRefreshView
 from .views import (
+  ListBooks,
   BookListByUserApiView,
   UserListByBookApiView,
   BookByUserGenre,
@@ -14,6 +15,7 @@ from .views import (
   RegisterView,
 )
 
+# https://django.cowhite.com/blog/exporting-and-importing-data-in-django-using-pg_dump-in-postgresql-mysqldump-in-mysql-dumpdata-and-loaddata-commands-in-django/
 urlpatterns = [
   # path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
   # auth
@@ -23,6 +25,7 @@ urlpatterns = [
 
   # app
   path('profile/<int:user_id>/', ProfileView.as_view()),
+  path('books/', ListBooks.as_view()),
   path('books-by-user/', BookListByUserApiView.as_view()),
   path('books-by-user/<int:user_id>/', BookListByUserApiView.as_view()),
   path('users-by-book/<int:book_id>/', UserListByBookApiView.as_view()),
