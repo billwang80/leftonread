@@ -9,6 +9,7 @@ from .models import Book, Profile, Friendship, Genre, Review
 from .serializers import (
   MyTokenObtainPairSerializer, 
   BookSerializer, 
+  GenreSerializer,
   UserSerializer, 
   ProfileSerializer, 
   RegisterSerializer,
@@ -19,18 +20,77 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 '''
 Need:
+- Register account /
+- Refresh token /
 - Get friends by userId /
 - Get users reading book /
-- Get all books x
+- Get all books /
 - Get books on user's list /
 - Get recommended books for users (genre) /
 - Get reviews of a book /
-- Get users profile x
+- Get users profile /
+- Get books of friends /
 - Get reviews from author /
 - Get all reviews from friends /
-- Write review x
-- Reading goal -> number of books in year x
+- Write review /
+- Select favourite genres /
+- Create reading progression /
+- Get reading goal -> number of books in year x
+- Create reading goal x
 '''
+
+class ReadingGoal(APIView):
+  def get(self, request, *args, **kwargs):
+    '''
+    Get reading goal by user_id
+    '''
+    user_id = kwargs.get('user_id')
+    goal = Goal.objects.get(user=user_id)
+    books_read = Book.objects.filter(users=user_id, many=True)
+  # def put(self, request):
+
+class SelectGenres(APIView):
+  permission_classes = [permissions.IsAuthenticated]
+
+  def put(self, request):
+    user_id = request.user.id
+    data = request.data
+    genre_set = set()
+
+    for item in data:
+      genre_set.add(item['genre_name'])
+
+    genres = Genre.objects.all()
+
+    for genre in genres:
+      if genre.genre_name not in genre_set:
+        genre.users.remove(user_id)
+      else:
+        genre.users.add(user_id)
+
+    return Response(status=status.HTTP_201_CREATED)
+
+class PostReview(APIView):
+  permission_classes = [permissions.IsAuthenticated]
+
+  def post(self, request, *args, **kwargs):
+    user_id = request.user.id
+    book_id = request.data.get('book')
+
+    if Review.objects.filter(user=user_id, book=book_id).exists():
+      return Response("You already made a review for this book", status.HTTP_400_BAD_REQUEST)
+
+    data = {
+      'rating': request.data.get('rating'),
+      'review_text': request.data.get('review_text'),
+      'user': user_id,
+      'book': book_id
+    }
+    serializer = ReviewSerializer(data=data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class FriendReviews(APIView):
   def get(self, request, *args, **kwargs):
@@ -42,6 +102,17 @@ class FriendReviews(APIView):
     reviews = Review.objects.filter(user__in=friends)
     review_serializer = ReviewSerializer(reviews, many=True)
     return Response(review_serializer.data, status=status.HTTP_200_OK)
+
+class FriendBooks(APIView):
+  def get(self, request, *args, **kwargs):
+    '''
+    Get books of friends of userId
+    '''
+    user_id = kwargs.get('user_id')
+    friends = User.objects.filter(profile__in=Profile.objects.filter(friends=user_id))
+    books = Book.objects.filter(users__in=friends)
+    book_serializer = BookSerializer(books, many=True)
+    return Response(book_serializer.data, status=status.HTTP_200_OK)
 
 class AuthorReviews(APIView):
   def get(self, request, *args, **kwargs):

@@ -7,7 +7,7 @@ from django.db.models.signals import post_save, post_delete
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.dispatch import receiver
 
-from datetime import date
+from datetime import datetime 
 
 # https://docs.djangoproject.com/en/dev/topics/auth/customizing/#extending-the-existing-user-model
 class Profile(models.Model):
@@ -37,7 +37,7 @@ class Friendship(models.Model): # designed for undirected friendship
     related_name='user1',
     on_delete=models.CASCADE,
   )
-  date_created = models.DateField(null=True, blank=True)
+  date_created = models.DateTimeField(default=datetime.now, blank=True)
 
 # https://groups.google.com/g/django-users/c/8xqiSDok2JA?pli=1
 @receiver(post_save, sender=Friendship)
@@ -118,7 +118,7 @@ class Review(models.Model):
     'Book',
     on_delete=models.CASCADE,
   )
-  review_date = models.DateField(null=True, blank=True)
+  review_date = models.DateTimeField(default=datetime.now, blank=True)
   rating = models.IntegerField(
     validators=[
       MaxValueValidator(5),
@@ -146,6 +146,14 @@ class Genre(models.Model):
   )
   books = models.ManyToManyField(Book, related_name='genres', blank=True)
   users = models.ManyToManyField(Profile, related_name='genres', blank=True)
+
+class Goal(models.Model):
+  user = models.ForeignKey(
+    settings.AUTH_USER_MODEL,
+    on_delete=models.CASCADE,
+  )
+  goal = models.IntegerField(blank=True)
+  goal_date = models.DateTimeField(default=datetime.now, blank=True)
 
 class TimePeriod(models.Model):
   time_period_name = models.CharField(max_length=60, default="")

@@ -4,12 +4,17 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.validators import UniqueValidator
 
-from .models import Profile, Book, Genre, Review
+from .models import Profile, Book, Genre, Review, Goal
+
+class GoalSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Goal
+    fields = ('user', 'goal', 'goal_date')
 
 class GenreSerializer(serializers.ModelSerializer):
   class Meta:
     model = Genre
-    fields = ('genre_name',)
+    fields = ('genre_name', 'books', 'users')
 
 class BookSerializer(serializers.ModelSerializer):
   # users = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
@@ -33,8 +38,8 @@ class UserSerializer(serializers.ModelSerializer):
     fields = ('id', 'username', 'email', 'first_name', 'last_name', 'phone_number')
 
 class ReviewSerializer(serializers.ModelSerializer):
-  user = UserSerializer()
-  book = BookSerializer()
+  # user = UserSerializer()
+  # book = BookSerializer()
 
   class Meta:
     model = Review
