@@ -14,6 +14,7 @@ from .views import (
   RegisterView,
 )
 
+# https://django.cowhite.com/blog/exporting-and-importing-data-in-django-using-pg_dump-in-postgresql-mysqldump-in-mysql-dumpdata-and-loaddata-commands-in-django/
 urlpatterns = [
   # path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
   # auth
