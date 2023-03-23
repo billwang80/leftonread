@@ -24,7 +24,7 @@ Need:
 - Refresh token /
 - Get friends by userId /
 - Get users reading book /
-- Get all books x
+- Get all books /
 - Get books on user's list /
 - Get recommended books for users (genre) /
 - Get reviews of a book /
@@ -32,7 +32,7 @@ Need:
 - Get reviews from author /
 - Get all reviews from friends /
 - Write review /
-- Select favourite genres x
+- Select favourite genres /
 - Create reading progression x
 - Get reading goal -> number of books in year x
 - Create reading goal x
