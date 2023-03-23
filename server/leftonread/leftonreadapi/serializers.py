@@ -9,7 +9,7 @@ from .models import Profile, Book, Genre, Review
 class GenreSerializer(serializers.ModelSerializer):
   class Meta:
     model = Genre
-    fields = ('genre_name',)
+    fields = ('genre_name', 'books', 'users')
 
 class BookSerializer(serializers.ModelSerializer):
   # users = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)

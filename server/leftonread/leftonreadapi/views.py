@@ -9,6 +9,7 @@ from .models import Book, Profile, Friendship, Genre, Review
 from .serializers import (
   MyTokenObtainPairSerializer, 
   BookSerializer, 
+  GenreSerializer,
   UserSerializer, 
   ProfileSerializer, 
   RegisterSerializer,
@@ -37,15 +38,26 @@ Need:
 - Create reading goal x
 '''
 
-# class SelectGenres(APIView):
-#   permission_classes = [permissions.IsAuthenticated]
+class SelectGenres(APIView):
+  permission_classes = [permissions.IsAuthenticated]
 
-#   def post(self, request, *args, **kwargs):
-#     user_id = request.user.id
-#     genre_name = request.data.get('genre')
+  def put(self, request):
+    user_id = request.user.id
+    data = request.data
+    genre_set = set()
 
-#     if Genre.objects.filter(user=user_id, genre_name=genre_name).exists():
-#       return Response("You already made a review for this book", status.HTTP_400_BAD_REQUEST)
+    for item in data:
+      genre_set.add(item['genre_name'])
+
+    genres = Genre.objects.all()
+
+    for genre in genres:
+      if genre.genre_name not in genre_set:
+        genre.users.remove(user_id)
+      else:
+        genre.users.add(user_id)
+
+    return Response(status=status.HTTP_201_CREATED)
 
 class PostReview(APIView):
   permission_classes = [permissions.IsAuthenticated]

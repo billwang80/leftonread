@@ -5,6 +5,7 @@ from .views import (
   ListBooks,
   BookListByUserApiView,
   UserListByBookApiView,
+  SelectGenres,
   BookByUserGenre,
   BookReview,
   AuthorReviews,
@@ -35,6 +36,7 @@ urlpatterns = [
   path('user-reviews/<int:user_id>/', AuthorReviews.as_view()),
   path('friend-reviews/<int:user_id>/', FriendReviews.as_view()),
   path('reviews/', PostReview.as_view()),
+  path('select-genres/', SelectGenres.as_view()),
   path('genre-recommend/<int:user_id>/', BookByUserGenre.as_view()),
   path('friends/<int:user_id>/', ListFriends.as_view()),
 ]
