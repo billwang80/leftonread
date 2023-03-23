@@ -4,7 +4,12 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.validators import UniqueValidator
 
-from .models import Profile, Book, Genre, Review
+from .models import Profile, Book, Genre, Review, Goal
+
+class GoalSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Goal
+    fields = ('user', 'goal', 'goal_date')
 
 class GenreSerializer(serializers.ModelSerializer):
   class Meta:

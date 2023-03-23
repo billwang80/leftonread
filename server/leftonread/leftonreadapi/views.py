@@ -29,14 +29,25 @@ Need:
 - Get recommended books for users (genre) /
 - Get reviews of a book /
 - Get users profile /
+- Get books of friends /
 - Get reviews from author /
 - Get all reviews from friends /
 - Write review /
 - Select favourite genres /
-- Create reading progression x
+- Create reading progression /
 - Get reading goal -> number of books in year x
 - Create reading goal x
 '''
+
+class ReadingGoal(APIView):
+  def get(self, request, *args, **kwargs):
+    '''
+    Get reading goal by user_id
+    '''
+    user_id = kwargs.get('user_id')
+    goal = Goal.objects.get(user=user_id)
+    books_read = Book.objects.filter(users=user_id, many=True)
+  # def put(self, request):
 
 class SelectGenres(APIView):
   permission_classes = [permissions.IsAuthenticated]
@@ -91,6 +102,17 @@ class FriendReviews(APIView):
     reviews = Review.objects.filter(user__in=friends)
     review_serializer = ReviewSerializer(reviews, many=True)
     return Response(review_serializer.data, status=status.HTTP_200_OK)
+
+class FriendBooks(APIView):
+  def get(self, request, *args, **kwargs):
+    '''
+    Get books of friends of userId
+    '''
+    user_id = kwargs.get('user_id')
+    friends = User.objects.filter(profile__in=Profile.objects.filter(friends=user_id))
+    books = Book.objects.filter(users__in=friends)
+    book_serializer = BookSerializer(books, many=True)
+    return Response(book_serializer.data, status=status.HTTP_200_OK)
 
 class AuthorReviews(APIView):
   def get(self, request, *args, **kwargs):
