@@ -39,7 +39,7 @@ Need:
 - Select favourite genres /
 - Create reading progression /
 - Get reading goal -> number of books in year /
-- Create reading goal x
+- Create reading goal /
 '''
 
 class CreateGoal(APIView):
@@ -56,7 +56,6 @@ class CreateGoal(APIView):
     if queryset.exists():
       goal = queryset.first()
       goal.goal = data['goal']
-      # goal.goal_date = datetime.now()
       goal.save()
       return Response(status=status.HTTP_201_CREATED)
     else:
@@ -226,7 +225,7 @@ class BookByUserGenre(APIView):
 
 class BookListByUserApiView(APIView):
   # add permission to check if user is auth
-  permission_classes = [permissions.IsAuthenticated]
+  # permission_classes = [permissions.IsAuthenticated]
 
   def get(self, request, *args, **kwargs):
     '''
