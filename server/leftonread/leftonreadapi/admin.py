@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Profile, Friendship, Book, UserBookRelation, Genre, Review
+from .models import Profile, Friendship, Book, UserBookRelation, Genre, Goal, Review
 
 def getFieldsModel(model):
   fields = [field.name for field in model._meta.get_fields() if field.many_to_many != True and field.one_to_many != True]
@@ -22,6 +22,10 @@ admin.site.register(Book, BookAdmin)
 class GenreAdmin(admin.ModelAdmin):
   list_display = getFieldsModel(Genre)
 admin.site.register(Genre, GenreAdmin)
+
+class GoalAdmin(admin.ModelAdmin):
+  list_display = getFieldsModel(Goal)
+admin.site.register(Goal, GoalAdmin)
 
 class ReviewAdmin(admin.ModelAdmin):
   list_display = getFieldsModel(Review)

@@ -4,12 +4,13 @@ from rest_framework import status
 from rest_framework import permissions
 
 from django.contrib.auth.models import User
-from .models import Book, Profile, Friendship, Genre, Review
+from .models import Book, Profile, Friendship, Genre, Review, Goal
 
 from .serializers import (
   MyTokenObtainPairSerializer, 
   BookSerializer, 
   GenreSerializer,
+  GoalSerializer,
   UserSerializer, 
   ProfileSerializer, 
   RegisterSerializer,
@@ -17,6 +18,8 @@ from .serializers import (
 )
 from rest_framework import generics
 from rest_framework_simplejwt.views import TokenObtainPairView
+
+from datetime import date, datetime
 
 '''
 Need:
@@ -35,9 +38,37 @@ Need:
 - Write review /
 - Select favourite genres /
 - Create reading progression /
-- Get reading goal -> number of books in year x
+- Get reading goal -> number of books in year /
 - Create reading goal x
 '''
+
+class CreateGoal(APIView):
+  permission_classes = [permissions.IsAuthenticated]
+
+  def put(self, request):
+    '''
+    Create/update reading goal for user
+    '''
+    user_id = request.user.id
+    data = request.data
+
+    queryset = Goal.objects.filter(user=user_id)
+    if queryset.exists():
+      goal = queryset.first()
+      goal.goal = data['goal']
+      # goal.goal_date = datetime.now()
+      goal.save()
+      return Response(status=status.HTTP_201_CREATED)
+    else:
+      goal_data = {
+        'user': user_id,
+        'goal': data['goal']
+      }
+      serializer = GoalSerializer(data=goal_data)
+      if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+      return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ReadingGoal(APIView):
   def get(self, request, *args, **kwargs):
@@ -46,13 +77,28 @@ class ReadingGoal(APIView):
     '''
     user_id = kwargs.get('user_id')
     goal = Goal.objects.get(user=user_id)
-    books_read = Book.objects.filter(users=user_id, many=True)
-  # def put(self, request):
+
+    first_day = date(date.today().year, 1, 1)
+    last_day = date(date.today().year, 12, 31)
+    books_read = Book.objects.filter(
+      users=user_id, 
+      userbookrelation__date_completed__range=(first_day, last_day)
+    )
+
+    book_serializer = BookSerializer(books_read, many=True)
+    goal_serializer = GoalSerializer(goal)
+
+    data = { 'goal': goal_serializer.data, 'books': book_serializer.data }
+    return Response(data, status=status.HTTP_200_OK)
 
 class SelectGenres(APIView):
   permission_classes = [permissions.IsAuthenticated]
 
   def put(self, request):
+    '''
+    Select favourite genres for user
+    Removes all non-selected genres
+    '''
     user_id = request.user.id
     data = request.data
     genre_set = set()
@@ -73,7 +119,10 @@ class SelectGenres(APIView):
 class PostReview(APIView):
   permission_classes = [permissions.IsAuthenticated]
 
-  def post(self, request, *args, **kwargs):
+  def post(self, request):
+    '''
+    Post review if user and book review does not exist
+    '''
     user_id = request.user.id
     book_id = request.data.get('book')
 
