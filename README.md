@@ -5,9 +5,16 @@
 - https://reactnative.dev/docs/environment-setup
 
 
+### To export and import database
+```
+python manage.py dumpdata > database.json
+python manage.py loaddata database.json
+```
+
 ### To setup project (Windows):
 - clone repo
 - run
+
 ```
 cd leftonread/server
 python -m venv env
