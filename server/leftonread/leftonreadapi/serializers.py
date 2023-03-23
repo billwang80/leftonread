@@ -6,11 +6,6 @@ from rest_framework.validators import UniqueValidator
 
 from .models import Profile, Book, Genre, Review, Goal
 
-class GoalSerializer(serializers.ModelSerializer):
-  class Meta:
-    model = Goal
-    fields = ('user', 'goal', 'goal_date')
-
 class GenreSerializer(serializers.ModelSerializer):
   class Meta:
     model = Genre
@@ -44,6 +39,13 @@ class ReviewSerializer(serializers.ModelSerializer):
   class Meta:
     model = Review
     fields = ('rating', 'review_date', 'review_text', 'user', 'book')
+
+class GoalSerializer(serializers.ModelSerializer):
+  # user = UserSerializer()
+  
+  class Meta:
+    model = Goal
+    fields = ('user', 'goal', 'goal_date')
 
 class ProfileSerializer(serializers.ModelSerializer):
   user = UserSerializer()

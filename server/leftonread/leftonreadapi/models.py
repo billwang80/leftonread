@@ -148,12 +148,9 @@ class Genre(models.Model):
   users = models.ManyToManyField(Profile, related_name='genres', blank=True)
 
 class Goal(models.Model):
-  user = models.ForeignKey(
-    settings.AUTH_USER_MODEL,
-    on_delete=models.CASCADE,
-  )
+  user = models.OneToOneField(User, on_delete=models.CASCADE)
   goal = models.IntegerField(blank=True)
-  goal_date = models.DateTimeField(default=datetime.now, blank=True)
+  goal_date = models.DateTimeField(auto_now=True)
 
 class TimePeriod(models.Model):
   time_period_name = models.CharField(max_length=60, default="")

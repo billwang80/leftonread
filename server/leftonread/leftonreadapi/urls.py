@@ -14,6 +14,8 @@ from .views import (
   PostReview,
   ListFriends,
   ProfileView,
+  ReadingGoal,
+  CreateGoal,
   MyObtainTokenPairView,
   RegisterView,
 )
@@ -33,6 +35,8 @@ urlpatterns = [
   path('books-by-user/', BookListByUserApiView.as_view()),
   path('books-by-user/<int:user_id>/', BookListByUserApiView.as_view()),
   path('users-by-book/<int:book_id>/', UserListByBookApiView.as_view()),
+  path('goal/<int:user_id>/', ReadingGoal.as_view()),
+  path('goal/', CreateGoal.as_view()),
   path('reviews/<int:book_id>/', BookReview.as_view()),
   path('user-reviews/<int:user_id>/', AuthorReviews.as_view()),
   path('friend-reviews/<int:user_id>/', FriendReviews.as_view()),
