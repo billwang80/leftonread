@@ -37,6 +37,16 @@ Need:
 - Create reading goal x
 '''
 
+# class SelectGenres(APIView):
+#   permission_classes = [permissions.IsAuthenticated]
+
+#   def post(self, request, *args, **kwargs):
+#     user_id = request.user.id
+#     genre_name = request.data.get('genre')
+
+#     if Genre.objects.filter(user=user_id, genre_name=genre_name).exists():
+#       return Response("You already made a review for this book", status.HTTP_400_BAD_REQUEST)
+
 class PostReview(APIView):
   permission_classes = [permissions.IsAuthenticated]
 
