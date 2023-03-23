@@ -21,6 +21,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 Need:
 - Get friends by userId /
 - Get users reading book /
+- Get all books x
 - Get books on user's list /
 - Get recommended books for users (genre) /
 - Get reviews of a book /
@@ -80,6 +81,15 @@ class BookApiView(APIView):
     '''
     book = Book.objects.get(id=kwargs.get('book_id')).first()
     serializer = BookSerializer(book)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+class ListBooks(APIView):
+  def get(self, request):
+    '''
+    Get all books
+    '''
+    books = Book.objects.filter()
+    serializer = BookSerializer(books, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 class BookByUserGenre(APIView):
