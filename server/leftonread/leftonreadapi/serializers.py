@@ -21,7 +21,7 @@ class BookSerializer(serializers.ModelSerializer):
     fields = (
       'title', 'author', 'country', 'language', 'word_count', 'difficulty', 
       'cover_image_url', 'avg_rating', 'publish_date', 'amazon_url', 'audible_url', 
-      'kindle_url', 'description', 'genres'
+      'kindle_url', 'description', 'genres', 'id'
     )
 
 class UserSerializer(serializers.ModelSerializer):

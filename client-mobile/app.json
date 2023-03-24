@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "client-mobile",
-    "slug": "client-mobile",
+    "slug": "leftonread",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -28,6 +28,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f83dba33-3249-4109-919a-d77837343f35"
+      }
+    },
+    "owner": "reesejen"
   }
 }
