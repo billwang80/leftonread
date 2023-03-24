@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   FlatList,
@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { AirbnbRating, Image, Button } from "@rneui/themed";
 import { Icon } from "@rneui/base";
+import { url } from "../constants";
 
 const styles = StyleSheet.create({
   container: {
@@ -25,16 +26,15 @@ const styles = StyleSheet.create({
   main: {
     width: "80%",
     position: "absolute",
-    top: -80,
+    top: -150,
     left: "10%",
   },
   title: {
     marginTop: 250,
     fontSize: 32,
-    color: "white",
+    fontWeight: "bold",
   },
   author: {
-    color: "#828082",
     fontSize: 20,
     fontWeight: "bold",
   },
@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#828082",
     flex: 1,
     alignSelf: "center",
   },
@@ -88,6 +87,19 @@ const styles = StyleSheet.create({
   additionalContent: {
     position: "absolute",
     top: 600,
+    marginLeft: 20,
+  },
+  sectionHeader: {
+    fontSize: 20,
+    marginTop: 20,
+    marginBottom: 20,
+    fontWeight: "bold",
+    color: "black",
+  },
+  profile: {
+    height: 50,
+    width: 50,
+    borderRadius: 25,
   },
 });
 
@@ -96,14 +108,38 @@ const DATA = [];
 for (let i = 0; i < 3; i++) {
   DATA.push({ uri: "https://m.media-amazon.com/images/I/51lyOfcaA8L.jpg" });
 }
-function Book({ book }) {
+function Book({ route }) {
+  const { book } = route.params;
+  const [reviews, setReviews] = useState([]);
+  const [users, setUsers] = useState({});
+
+  const reviewsURL = url + "reviews/" + book.id + "/";
+  const usersURL = url + "profile/";
+
+  useEffect(() => {
+    fetch(reviewsURL)
+      .then((response) => response.json())
+      .then((data) => {
+        const usersData = {};
+        for (const review of data) {
+          fetch(usersURL + String(review.user) + "/")
+            .then((response) => response.json())
+            .then((data) => {
+              usersData[review.user] = data;
+              setUsers(usersData);
+            });
+        }
+        setReviews(data);
+      });
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <Image source={image} style={styles.cover} />
+        <Image source={{ uri: book.cover_image_url }} style={styles.cover} />
         <View style={styles.main}>
-          <Text style={styles.title}>Moby Dick</Text>
-          <Text style={styles.author}>by Herman Melville</Text>
+          <Text style={styles.title}>{book.title}</Text>
+          <Text style={styles.author}>{book.author}</Text>
           <View style={styles.rating}>
             <AirbnbRating
               isDisabled={true}
@@ -115,12 +151,7 @@ function Book({ book }) {
             />
             <Text style={styles.ratingText}>4.1/5</Text>
           </View>
-          <Text style={styles.description}>
-            On board the whaling ship Pequod a crew of wise men and fools,
-            renegades and seeming phantoms is hurled through treacherous seas by
-            crazed Captain Ahab, a man hell-bent on hunting down the mythic
-            White Whale.
-          </Text>
+          <Text style={styles.description}>{book.description}</Text>
           <Button
             title="Play Quiz"
             icon={{
@@ -153,7 +184,29 @@ function Book({ book }) {
           </View>
         </View>
         <View style={styles.additionalContent}>
-          <Text>Related Content</Text>
+          {reviews.length > 0 ? (
+            <Text style={styles.sectionHeader}>Reviews</Text>
+          ) : null}
+          {reviews.map((review, index) => (
+            <View key={index}>
+              <Image
+                source={{
+                  uri: users[review.user]?.profile_picture_url,
+                }}
+                style={styles.profile}
+              />
+              <AirbnbRating
+                isDisabled={true}
+                count={review.rating}
+                defaultRating={review.rating}
+                showRating={false}
+                selectedColor="#2c6c54"
+                size={20}
+              />
+              <Text>{users[review.user]?.user?.username}</Text>
+              <Text>{review?.review_text}</Text>
+            </View>
+          ))}
         </View>
       </ScrollView>
     </SafeAreaView>

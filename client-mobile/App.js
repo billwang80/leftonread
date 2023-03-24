@@ -8,6 +8,7 @@ import AppHeader from "./components/AppHeader";
 import Feed from "./components/Feed";
 import Profile from "./components/Profile";
 import Book from "./components/Book";
+import BrowseBooks from "./components/BrowseBooks";
 
 const Stack = createNativeStackNavigator();
 const styles = StyleSheet.create({
@@ -54,6 +55,14 @@ export default function App() {
         <Stack.Screen
           name="Book"
           component={Book}
+          options={{
+            headerTitleStyle: styles.searchHeaderTitle,
+            headerShadowVisible: false,
+          }}
+        />
+        <Stack.Screen
+          name="Browse"
+          component={BrowseBooks}
           options={{
             headerTitleStyle: styles.searchHeaderTitle,
             headerShadowVisible: false,

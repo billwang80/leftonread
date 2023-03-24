@@ -7,7 +7,7 @@ const styles = {
     height: 200,
     borderRadius: 25,
     marginRight: 30,
-    marginBottom: 0,
+    marginBottom: 30,
   },
 };
 

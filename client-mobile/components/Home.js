@@ -12,7 +12,7 @@ import {
 import { Image } from "@rneui/themed";
 import AppFooter from "./AppFooter";
 import BookImage from "./BookImage";
-//import { recommended } from "../constants";
+import { url } from "../constants";
 
 const styles = StyleSheet.create({
   container: {
@@ -52,8 +52,8 @@ const styles = StyleSheet.create({
 });
 
 function Home({ navigation }) {
-  const allBooks = "http://10.101.189.7:8000/books/";
-  const recommendedURL = "http://10.101.189.7:8000/genre-recommend/1/";
+  const friendsURL = url + "friend-books/1/";
+  const recommendedURL = url + "genre-recommend/1/";
   const DATA = [
     { uri: "https://m.media-amazon.com/images/I/51lyOfcaA8L.jpg" },
     { uri: "https://m.media-amazon.com/images/I/51E7yd+G-cL.jpg" },
@@ -61,7 +61,6 @@ function Home({ navigation }) {
       uri: "https://m.media-amazon.com/images/I/41sSGNdakQL._SY264_BO1,204,203,200_QL40_ML2_.jpg",
     },
   ];
-
   const POPULAR = [
     {
       uri: "https://media.npr.org/assets/img/2021/09/30/banned-books_wide-9d1987389d6b402261e7bcff80a85a52daa54db8-s1400-c100.jpg",
@@ -69,30 +68,16 @@ function Home({ navigation }) {
     },
   ];
 
-  const FRIENDS = [
-    {
-      uri: "https://cdn.penguin.co.uk/dam-assets/books/9781784752637/9781784752637-jacket-large.jpg",
-    },
-    {
-      uri: "https://cdn.penguin.co.uk/dam-assets/books/9780241281901/9780241281901-jacket-large.jpg",
-    },
-    {
-      uri: "https://cdn.penguin.co.uk/dam-assets/books/9780140449136/9780140449136-jacket-large.jpg",
-    },
-  ];
-
   const [recommended, setRecommended] = useState([]);
-  const [popular, setPopular] = useState([]);
+  const [friendsBooks, setfriendsBooks] = useState([]);
 
   useEffect(() => {
     fetch(recommendedURL)
       .then((response) => response.json())
       .then((data) => setRecommended(data));
-    fetch(allBooks)
+    fetch(friendsURL)
       .then((response) => response.json())
-      .then((data) =>
-        setPopular(data.sort((a, b) => a.popularity - b.popularity))
-      );
+      .then((data) => setfriendsBooks(data));
   }, []);
 
   return (
@@ -104,9 +89,15 @@ function Home({ navigation }) {
           <FlatList
             data={recommended}
             renderItem={({ item }) => (
-              <BookImage book={item} navigation={navigation} />
+              <View>
+                <BookImage
+                  book={item}
+                  navigation={navigation}
+                  key={item.title}
+                />
+              </View>
             )}
-            keyExtractor={(book) => book.cover_image_url}
+            keyExtractor={(item) => item.title}
             horizontal={true}
             style={styles.recommended}
           />
@@ -114,7 +105,7 @@ function Home({ navigation }) {
           <FlatList
             data={POPULAR}
             renderItem={({ item }) => (
-              <View>
+              <View key={item.title}>
                 <Image source={{ uri: item.uri }} style={styles.popularItem} />
                 <Text>{item.title}</Text>
               </View>
@@ -125,14 +116,11 @@ function Home({ navigation }) {
           />
           <Text style={styles.sectionName}>Your Friends are Reading</Text>
           <FlatList
-            data={FRIENDS}
+            data={friendsBooks}
             renderItem={({ item }) => (
-              <Image
-                source={{ uri: item.uri }}
-                style={styles.recommendedItem}
-              />
+              <BookImage book={item} navigation={navigation} key={item.title} />
             )}
-            keyExtractor={(item) => item.uri}
+            keyExtractor={(item) => item.title}
             horizontal={true}
             style={styles.recommended}
           />
