@@ -97,10 +97,35 @@ const styles = StyleSheet.create({
     color: "black",
   },
   profile: {
-    height: 50,
-    width: 50,
-    borderRadius: 25,
+    height: 40,
+    width: 40,
+    borderRadius: 20,
   },
+  reviewTopRow: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  reviewContainer: {
+    borderWidth: 0.5,
+    borderRadius: 10,
+    borderColor: "#828282",
+    width: 350,
+    height: 100,
+    padding: 15,
+  },
+  reviewProfile: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+  },
+  reviewText: {
+    fontSize: 14,
+    fontWeight: "bold",
+    marginTop: 10,
+  },
+  username: { marginEnd: 10, color: "#828282" },
 });
 
 const image = { uri: "https://m.media-amazon.com/images/I/81FWMAwqkmL.jpg" };
@@ -112,6 +137,7 @@ function Book({ route }) {
   const { book } = route.params;
   const [reviews, setReviews] = useState([]);
   const [users, setUsers] = useState({});
+  const [highlight, setHighlight] = useState(null);
 
   const reviewsURL = url + "reviews/" + book.id + "/";
   const usersURL = url + "profile/";
@@ -135,7 +161,7 @@ function Book({ route }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
+      <ScrollView style={{ width: "100%" }}>
         <Image source={{ uri: book.cover_image_url }} style={styles.cover} />
         <View style={styles.main}>
           <Text style={styles.title}>{book.title}</Text>
@@ -152,7 +178,7 @@ function Book({ route }) {
             <Text style={styles.ratingText}>4.1/5</Text>
           </View>
           <Text style={styles.description}>{book.description}</Text>
-          <Button
+          {/* <Button
             title="Play Quiz"
             icon={{
               name: "controller-play",
@@ -162,23 +188,36 @@ function Book({ route }) {
             }}
             buttonStyle={styles.quizButton}
             titleStyle={styles.quizButtonText}
-          />
+          /> */}
         </View>
         <View style={styles.actions}>
           <View>
-            <Icon name="eye" color="white" size={30} type="feather" />
+            <Icon
+              name="eye"
+              color={highlight == 0 ? "green" : "white"}
+              size={30}
+              type="feather"
+              onPress={() => setHighlight(0)}
+            />
             <Text style={styles.actionLabel}>To Read</Text>
           </View>
           <View>
-            <Icon name="bookmark" color="white" size={30} type="entypo" />
+            <Icon
+              name="bookmark"
+              color={highlight == 1 ? "green" : "white"}
+              size={30}
+              type="entypo"
+              onPress={() => setHighlight(1)}
+            />
             <Text style={styles.actionLabel}>Reading</Text>
           </View>
           <View>
             <Icon
               name="checkmark-circle-outline"
-              color="white"
+              color={highlight == 2 ? "green" : "white"}
               size={30}
               type="ionicon"
+              onPress={() => setHighlight(2)}
             />
             <Text style={styles.actionLabel}>Mark Done</Text>
           </View>
@@ -188,23 +227,29 @@ function Book({ route }) {
             <Text style={styles.sectionHeader}>Reviews</Text>
           ) : null}
           {reviews.map((review, index) => (
-            <View key={index}>
-              <Image
-                source={{
-                  uri: users[review.user]?.profile_picture_url,
-                }}
-                style={styles.profile}
-              />
-              <AirbnbRating
-                isDisabled={true}
-                count={review.rating}
-                defaultRating={review.rating}
-                showRating={false}
-                selectedColor="#2c6c54"
-                size={20}
-              />
-              <Text>{users[review.user]?.user?.username}</Text>
-              <Text>{review?.review_text}</Text>
+            <View style={styles.reviewContainer} key={index}>
+              <View style={styles.reviewTopRow}>
+                <AirbnbRating
+                  isDisabled={true}
+                  count={review.rating}
+                  defaultRating={review.rating}
+                  showRating={false}
+                  selectedColor="#2c6c54"
+                  size={20}
+                />
+                <View style={styles.reviewProfile}>
+                  <Text style={styles.username}>
+                    {users[review.user]?.user?.username}
+                  </Text>
+                  <Image
+                    source={{
+                      uri: users[review.user]?.profile_picture_url,
+                    }}
+                    style={styles.profile}
+                  />
+                </View>
+              </View>
+              <Text style={styles.reviewText}>{review?.review_text}</Text>
             </View>
           ))}
         </View>

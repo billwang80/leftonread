@@ -90,14 +90,10 @@ function Home({ navigation }) {
             data={recommended}
             renderItem={({ item }) => (
               <View>
-                <BookImage
-                  book={item}
-                  navigation={navigation}
-                  key={item.title}
-                />
+                <BookImage book={item} navigation={navigation} />
               </View>
             )}
-            keyExtractor={(item) => item.title}
+            keyExtractor={(item) => item.id}
             horizontal={true}
             style={styles.recommended}
           />
@@ -118,9 +114,9 @@ function Home({ navigation }) {
           <FlatList
             data={friendsBooks}
             renderItem={({ item }) => (
-              <BookImage book={item} navigation={navigation} key={item.title} />
+              <BookImage book={item} navigation={navigation} />
             )}
-            keyExtractor={(item) => item.title}
+            keyExtractor={(item) => item.id}
             horizontal={true}
             style={styles.recommended}
           />
