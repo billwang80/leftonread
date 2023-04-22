@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
 import { Icon, Image } from "@rneui/themed";
+import BoldText from "./BoldText";
 
 const IMAGE_URI =
   "https://media.licdn.com/dms/image/C5603AQFj6oNhrUEycg/profile-displayphoto-shrink_800_800/0/1636739777705?e=1681948800&v=beta&t=PTXRkY3BGoUMfbB7U2Dcnroi4_qxeFESikMEEmo7KMw";
@@ -9,17 +10,9 @@ function AppHeader({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.main}>
-        <Text style={styles.title}>Home</Text>
+        <BoldText style={styles.title}>Home</BoldText>
         <View style={styles.rightContainer}>
           <View style={styles.rightContainerContent}>
-            {/* <Icon 
-              name='search'
-              color= 'black' 
-              size={50} 
-              onPress={() => 
-                navigation.navigate('Search')
-              } 
-            /> */}
             <Image
               source={{ uri: IMAGE_URI }}
               style={styles.image}

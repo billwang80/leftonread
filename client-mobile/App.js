@@ -9,15 +9,25 @@ import Feed from "./components/Feed";
 import Profile from "./components/Profile";
 import Book from "./components/Book";
 import BrowseBooks from "./components/BrowseBooks";
+import { useFonts } from "expo-font";
 
 const Stack = createNativeStackNavigator();
-const styles = StyleSheet.create({
-  searchHeaderTitle: {
-    fontSize: 36,
-  },
-});
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    "Satoshi-Regular": require("./OTF/Satoshi-Regular.otf"),
+    "Satoshi-Black": require("./OTF/Satoshi-Black.otf"),
+    "Satoshi-Bold": require("./OTF/Satoshi-Bold.otf"),
+  });
+  if (!fontsLoaded) {
+    return null;
+  }
+  const styles = StyleSheet.create({
+    searchHeaderTitle: {
+      fontSize: 36,
+      fontFamily: "Satoshi-Bold",
+    },
+  });
   return (
     <NavigationContainer>
       <Stack.Navigator>

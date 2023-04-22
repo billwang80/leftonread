@@ -10,6 +10,9 @@ import {
 import { AirbnbRating, Image, Button } from "@rneui/themed";
 import { Icon } from "@rneui/base";
 import { url } from "../constants";
+import RegularText from "./RegularText";
+import BoldText from "./BoldText";
+import BlackText from "./BlackText";
 
 const styles = StyleSheet.create({
   container: {
@@ -164,8 +167,8 @@ function Book({ route }) {
       <ScrollView style={{ width: "100%" }}>
         <Image source={{ uri: book.cover_image_url }} style={styles.cover} />
         <View style={styles.main}>
-          <Text style={styles.title}>{book.title}</Text>
-          <Text style={styles.author}>{book.author}</Text>
+          <BoldText style={styles.title}>{book.title}</BoldText>
+          <BoldText style={styles.author}>{book.author}</BoldText>
           <View style={styles.rating}>
             <AirbnbRating
               isDisabled={true}
@@ -175,9 +178,9 @@ function Book({ route }) {
               selectedColor="#2c6c54"
               size={20}
             />
-            <Text style={styles.ratingText}>4.1/5</Text>
+            <BoldText style={styles.ratingText}>4.1/5</BoldText>
           </View>
-          <Text style={styles.description}>{book.description}</Text>
+          <BlackText style={styles.description}>{book.description}</BlackText>
           {/* <Button
             title="Play Quiz"
             icon={{
@@ -199,7 +202,7 @@ function Book({ route }) {
               type="feather"
               onPress={() => setHighlight(0)}
             />
-            <Text style={styles.actionLabel}>To Read</Text>
+            <RegularText style={styles.actionLabel}>To Read</RegularText>
           </View>
           <View>
             <Icon
@@ -209,7 +212,7 @@ function Book({ route }) {
               type="entypo"
               onPress={() => setHighlight(1)}
             />
-            <Text style={styles.actionLabel}>Reading</Text>
+            <RegularText style={styles.actionLabel}>Reading</RegularText>
           </View>
           <View>
             <Icon
@@ -219,12 +222,12 @@ function Book({ route }) {
               type="ionicon"
               onPress={() => setHighlight(2)}
             />
-            <Text style={styles.actionLabel}>Mark Done</Text>
+            <RegularText style={styles.actionLabel}>Mark Done</RegularText>
           </View>
         </View>
         <View style={styles.additionalContent}>
           {reviews.length > 0 ? (
-            <Text style={styles.sectionHeader}>Reviews</Text>
+            <BoldText style={styles.sectionHeader}>Reviews</BoldText>
           ) : null}
           {reviews.map((review, index) => (
             <View style={styles.reviewContainer} key={index}>
@@ -238,9 +241,9 @@ function Book({ route }) {
                   size={20}
                 />
                 <View style={styles.reviewProfile}>
-                  <Text style={styles.username}>
+                  <RegularText style={styles.username}>
                     {users[review.user]?.user?.username}
-                  </Text>
+                  </RegularText>
                   <Image
                     source={{
                       uri: users[review.user]?.profile_picture_url,
@@ -249,7 +252,9 @@ function Book({ route }) {
                   />
                 </View>
               </View>
-              <Text style={styles.reviewText}>{review?.review_text}</Text>
+              <RegularText style={styles.reviewText}>
+                {review?.review_text}
+              </RegularText>
             </View>
           ))}
         </View>

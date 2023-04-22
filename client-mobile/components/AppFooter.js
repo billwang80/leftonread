@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, View, StyleSheet, TouchableHighlight } from "react-native";
 import { Icon } from "@rneui/themed";
+import RegularText from "./RegularText";
 
 function AppFooter({ navigation }) {
   return (
@@ -9,19 +10,29 @@ function AppFooter({ navigation }) {
         <TouchableHighlight>
           <View>
             <Icon name="home" color="black" />
-            <Text>Home</Text>
+            <RegularText>Home</RegularText>
           </View>
         </TouchableHighlight>
         <TouchableHighlight onPress={() => navigation.navigate("Browse")}>
           <View>
             <Icon name="book" color="black" />
-            <Text>Books</Text>
+            <RegularText>Books</RegularText>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight onPress={() => navigation.navigate("Feed")}>
+          <View>
+            <Icon
+              name="search"
+              color="black"
+              onPress={() => navigation.navigate("Search")}
+            />
+            <RegularText>Search</RegularText>
           </View>
         </TouchableHighlight>
         <TouchableHighlight onPress={() => navigation.navigate("Feed")}>
           <View>
             <Icon type="font-awesome-5" name="wave-square" color="black" />
-            <Text>Feed</Text>
+            <RegularText>Feed</RegularText>
           </View>
         </TouchableHighlight>
       </View>

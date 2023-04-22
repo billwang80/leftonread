@@ -1,16 +1,17 @@
 import React from "react";
 import {
-  Text,
   FlatList,
   View,
   StyleSheet,
   SafeAreaView,
   ScrollView,
 } from "react-native";
-import { Image, AirbnbRating, SafeAreaProvider } from "@rneui/themed";
+import { Image, AirbnbRating } from "@rneui/themed";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import { getTimeDifference } from "./Feed";
-import contentImage from "./contentImage";
+import RegularText from "./RegularText";
+import BoldText from "./BoldText";
+import BlackText from "./BlackText";
 
 const styles = StyleSheet.create({
   container: {
@@ -197,10 +198,10 @@ function Profile() {
           }}
           style={styles.profileImage}
         />
-        <Text style={styles.profileTag}>{DATA.profileTag}</Text>
-        <Text
+        <BoldText style={styles.profileTag}>{DATA.profileTag}</BoldText>
+        <RegularText
           style={styles.socials}
-        >{`${DATA.numFriends} friends - ${DATA.numFollowing} following`}</Text>
+        >{`${DATA.numFriends} friends - ${DATA.numFollowing} following`}</RegularText>
         <View style={styles.goalContainer}>
           <View style={styles.goals}>
             <AnimatedCircularProgress
@@ -209,18 +210,20 @@ function Profile() {
               fill={(DATA.booksRead / DATA.readingGoal) * 100}
               tintColor="#2c6c54"
             >
-              {() => <Text>{DATA.booksRead}</Text>}
+              {() => <RegularText>{DATA.booksRead}</RegularText>}
             </AnimatedCircularProgress>
             <View style={styles.goalText}>
-              <Text style={styles.goalTitle}>2023 Reading Goal</Text>
-              <Text
+              <RegularText style={styles.goalTitle}>
+                2023 Reading Goal
+              </RegularText>
+              <RegularText
                 style={styles.goalContent}
-              >{`You have completed ${DATA.booksRead} out of ${DATA.readingGoal} books for this year.`}</Text>
+              >{`You have completed ${DATA.booksRead} out of ${DATA.readingGoal} books for this year.`}</RegularText>
             </View>
           </View>
         </View>
         <View style={styles.readingNowContainer}>
-          <Text style={styles.sectionHeader}>Reading Now</Text>
+          <BoldText style={styles.sectionHeader}>Reading Now</BoldText>
           <FlatList
             data={READING}
             renderItem={({ item }) => (
@@ -233,17 +236,21 @@ function Profile() {
           />
         </View>
         <View style={styles.reviewsContainer}>
-          <Text style={styles.sectionHeader}>Reviews</Text>
+          <BoldText style={styles.sectionHeader}>Reviews</BoldText>
           {REVIEWS.map((item) => (
             <View style={styles.post} key={item.imageURI}>
               <View style={styles.postMain}>
                 <View style={styles.postTitle}>
-                  <Text style={styles.date}>{`${getTimeDifference(
+                  <RegularText style={styles.date}>{`${getTimeDifference(
                     item.date
-                  )} days ago`}</Text>
+                  )} days ago`}</RegularText>
                 </View>
-                <Text style={styles.bookTitle}>{`${item.title} `}</Text>
-                <Text style={styles.authorName}>{`by ${item.author}`}</Text>
+                <BlackText
+                  style={styles.bookTitle}
+                >{`${item.title} `}</BlackText>
+                <RegularText
+                  style={styles.authorName}
+                >{`by ${item.author}`}</RegularText>
                 {item.type === "review" ? (
                   <AirbnbRating
                     isDisabled={true}
@@ -257,7 +264,7 @@ function Profile() {
                 <View style={styles.bookContent}>
                   <Image source={{ uri: item.imageURI }} style={styles.book} />
                   <View style={styles.extra}>
-                    <Text>{item.extra}</Text>
+                    <RegularText>{item.extra}</RegularText>
                   </View>
                 </View>
               </View>

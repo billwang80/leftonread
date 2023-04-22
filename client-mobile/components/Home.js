@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import {
   StyleSheet,
-  Text,
   FlatList,
   SafeAreaView,
   View,
@@ -13,21 +12,24 @@ import { Image } from "@rneui/themed";
 import AppFooter from "./AppFooter";
 import BookImage from "./BookImage";
 import { url } from "../constants";
+import BoldText from "./BoldText";
+import BlackText from "./BlackText";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    fontFamily: "Satoshi-Regular",
   },
   main: {
     backgroundColor: "#f4f4f4",
     paddingLeft: 40,
+    fontFamily: "Satoshi-Regular",
   },
   sectionName: {
     marginTop: 20,
-    marginBottom: 30,
+    marginBottom: 10,
     fontSize: 20,
-    fontWeight: "bold",
   },
   recommendedItem: {
     width: 130,
@@ -85,7 +87,7 @@ function Home({ navigation }) {
       <SafeAreaView style={styles.container}>
         <StatusBar barStyle={"dark-content"} />
         <ScrollView style={styles.main}>
-          <Text style={styles.sectionName}>Recommended</Text>
+          <BoldText style={styles.sectionName}>Recommended</BoldText>
           <FlatList
             data={recommended}
             renderItem={({ item }) => (
@@ -97,20 +99,22 @@ function Home({ navigation }) {
             horizontal={true}
             style={styles.recommended}
           />
-          <Text style={styles.sectionName}>Popular Content</Text>
+          <BoldText style={styles.sectionName}>Popular Content</BoldText>
           <FlatList
             data={POPULAR}
             renderItem={({ item }) => (
               <View key={item.title}>
                 <Image source={{ uri: item.uri }} style={styles.popularItem} />
-                <Text>{item.title}</Text>
+                <BlackText>{item.title}</BlackText>
               </View>
             )}
             keyExtractor={(item) => item.title}
             horizontal={true}
             style={styles.popular}
           />
-          <Text style={styles.sectionName}>Your Friends are Reading</Text>
+          <BoldText style={styles.sectionName}>
+            Your Friends are Reading
+          </BoldText>
           <FlatList
             data={friendsBooks}
             renderItem={({ item }) => (

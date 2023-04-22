@@ -9,6 +9,8 @@ import {
   StatusBar,
 } from "react-native";
 import { SearchBar, Icon } from "@rneui/themed";
+import RegularText from "./RegularText";
+import BoldText from "./BoldText";
 
 const DATA = [
   { topic: "Genres", icon: "moon", type: "feather" },
@@ -39,12 +41,15 @@ function Search() {
             containerStyle={styles.searchContainer}
             inputContainerStyle={styles.searchBar}
           />
-          <Text style={styles.cancel} onPress={() => searchRef.current.blur()}>
+          <RegularText
+            style={styles.cancel}
+            onPress={() => searchRef.current.blur()}
+          >
             Cancel
-          </Text>
+          </RegularText>
         </View>
       </View>
-      <Text style={styles.explore}>Explore different...</Text>
+      <BoldText style={styles.explore}>Explore different...</BoldText>
       <FlatList
         data={DATA}
         renderItem={({ item }) => (
@@ -56,7 +61,7 @@ function Search() {
               size={40}
               containerStyle={styles.icon}
             />
-            <Text style={{ fontSize: 20 }}>{item.topic}</Text>
+            <BoldText style={{ fontSize: 20 }}>{item.topic}</BoldText>
             <Icon
               type="simple-line-icon"
               name="arrow-right"

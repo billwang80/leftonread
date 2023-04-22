@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Text, FlatList, View, StyleSheet, SafeAreaView } from "react-native";
 import { AirbnbRating, Image, ButtonGroup } from "@rneui/themed";
+import RegularText from "./RegularText";
+import BoldText from "./BoldText";
+import BlackText from "./BlackText";
 
 const styles = StyleSheet.create({
   tabs: {
@@ -25,6 +28,7 @@ const styles = StyleSheet.create({
   },
   tabText: {
     color: "black",
+    fontFamily: "Satoshi-Regular",
   },
   profile: {
     height: 50,
@@ -156,7 +160,7 @@ function Feed() {
     <SafeAreaView>
       <View style={styles.tabs}>
         <ButtonGroup
-          buttons={["Friends", "Everybody"]}
+          buttons={["Friends", "Leaderboard"]}
           selectedIndex={selectedIndex}
           onPress={(value) => {
             setSelectedIndex(value);
@@ -175,17 +179,19 @@ function Feed() {
             <Image source={{ uri: item.profile }} style={styles.profile} />
             <View style={styles.postMain}>
               <View style={styles.postTitle}>
-                <Text style={styles.userTitle}>{`${item.name} ${getPostType(
-                  item.type
-                )}`}</Text>
-                <Text style={styles.date}>{`${getTimeDifference(
+                <RegularText style={styles.userTitle}>{`${
+                  item.name
+                } ${getPostType(item.type)}`}</RegularText>
+                <RegularText style={styles.date}>{`${getTimeDifference(
                   item.date
-                )} days ago`}</Text>
+                )} days ago`}</RegularText>
               </View>
-              <Text style={styles.bookTitle}>
+              <BlackText style={styles.bookTitle}>
                 {`${item.title} `}{" "}
-                <Text style={styles.authorName}>{`by ${item.author}`}</Text>
-              </Text>
+                <RegularText
+                  style={styles.authorName}
+                >{`by ${item.author}`}</RegularText>
+              </BlackText>
               {item.type === "review" ? (
                 <AirbnbRating
                   isDisabled={true}
@@ -199,7 +205,7 @@ function Feed() {
               <View style={styles.bookContent}>
                 <Image source={{ uri: item.imageURI }} style={styles.book} />
                 <View style={styles.extra}>
-                  <Text>{item.extra}</Text>
+                  <RegularText>{item.extra}</RegularText>
                 </View>
               </View>
             </View>
