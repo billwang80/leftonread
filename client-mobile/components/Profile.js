@@ -194,7 +194,7 @@ function Profile() {
       <ScrollView contentContainerStyle={styles.main}>
         <Image
           source={{
-            uri: "https://media.licdn.com/dms/image/C5603AQFj6oNhrUEycg/profile-displayphoto-shrink_800_800/0/1636739777705?e=1681948800&v=beta&t=PTXRkY3BGoUMfbB7U2Dcnroi4_qxeFESikMEEmo7KMw",
+            uri: "https://github.com/billwang80/leftonread/blob/UIDevelopment/client-mobile/Josh_Issa.jpeg?raw=true",
           }}
           style={styles.profileImage}
         />

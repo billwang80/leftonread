@@ -7,8 +7,12 @@ const defaultStyle = StyleSheet.create({
   },
 });
 
-function BlackText({ style, children }) {
-  return <Text style={{ ...defaultStyle.text, ...style }}>{children}</Text>;
+function BlackText({ style, children, onPress }) {
+  return (
+    <Text style={{ ...defaultStyle.text, ...style }} onPress={onPress}>
+      {children}
+    </Text>
+  );
 }
 
 export default BlackText;

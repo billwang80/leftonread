@@ -14,6 +14,8 @@ import BookImage from "./BookImage";
 import { url } from "../constants";
 import BoldText from "./BoldText";
 import BlackText from "./BlackText";
+import RegularText from "./RegularText";
+import { AnimatedCircularProgress } from "react-native-circular-progress";
 
 const styles = StyleSheet.create({
   container: {
@@ -23,7 +25,7 @@ const styles = StyleSheet.create({
   },
   main: {
     backgroundColor: "#f4f4f4",
-    paddingLeft: 40,
+    paddingLeft: 20,
     fontFamily: "Satoshi-Regular",
   },
   sectionName: {
@@ -50,6 +52,34 @@ const styles = StyleSheet.create({
   },
   popular: {
     height: 220,
+  },
+  goalContainer: {
+    height: 100,
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 10,
+    marginTop: 20,
+    marginRight: 20,
+  },
+  goals: {
+    flex: 1,
+    flexDirection: "row",
+  },
+  goalText: {
+    flex: 1,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginLeft: 15,
+  },
+  goalTitle: {
+    color: "#828282",
+  },
+  goalContent: {
+    marginTop: 10,
+    fontSize: 16,
+  },
+  mainContent: {
+    marginLeft: 20,
   },
 });
 
@@ -87,43 +117,68 @@ function Home({ navigation }) {
       <SafeAreaView style={styles.container}>
         <StatusBar barStyle={"dark-content"} />
         <ScrollView style={styles.main}>
-          <BoldText style={styles.sectionName}>Recommended</BoldText>
-          <FlatList
-            data={recommended}
-            renderItem={({ item }) => (
-              <View>
+          <View style={styles.goalContainer}>
+            <View style={styles.goals}>
+              <AnimatedCircularProgress
+                size={70}
+                width={8}
+                fill={(19 / 24) * 100}
+                tintColor="#2c6c54"
+              >
+                {() => <RegularText>{19}</RegularText>}
+              </AnimatedCircularProgress>
+              <View style={styles.goalText}>
+                <RegularText style={styles.goalTitle}>
+                  2023 Reading Goal
+                </RegularText>
+                <RegularText
+                  style={styles.goalContent}
+                >{`You have completed 19 out of 24 books for this year.`}</RegularText>
+              </View>
+            </View>
+          </View>
+          <View style={styles.mainContent}>
+            <BoldText style={styles.sectionName}>Recommended</BoldText>
+            <FlatList
+              data={recommended}
+              renderItem={({ item }) => (
+                <View>
+                  <BookImage book={item} navigation={navigation} />
+                </View>
+              )}
+              keyExtractor={(item) => item.id}
+              horizontal={true}
+              style={styles.recommended}
+            />
+            <BoldText style={styles.sectionName}>Popular Content</BoldText>
+            <FlatList
+              data={POPULAR}
+              renderItem={({ item }) => (
+                <View key={item.title}>
+                  <Image
+                    source={{ uri: item.uri }}
+                    style={styles.popularItem}
+                  />
+                  <BlackText>{item.title}</BlackText>
+                </View>
+              )}
+              keyExtractor={(item) => item.title}
+              horizontal={true}
+              style={styles.popular}
+            />
+            <BoldText style={styles.sectionName}>
+              Your Friends are Reading
+            </BoldText>
+            <FlatList
+              data={friendsBooks}
+              renderItem={({ item }) => (
                 <BookImage book={item} navigation={navigation} />
-              </View>
-            )}
-            keyExtractor={(item) => item.id}
-            horizontal={true}
-            style={styles.recommended}
-          />
-          <BoldText style={styles.sectionName}>Popular Content</BoldText>
-          <FlatList
-            data={POPULAR}
-            renderItem={({ item }) => (
-              <View key={item.title}>
-                <Image source={{ uri: item.uri }} style={styles.popularItem} />
-                <BlackText>{item.title}</BlackText>
-              </View>
-            )}
-            keyExtractor={(item) => item.title}
-            horizontal={true}
-            style={styles.popular}
-          />
-          <BoldText style={styles.sectionName}>
-            Your Friends are Reading
-          </BoldText>
-          <FlatList
-            data={friendsBooks}
-            renderItem={({ item }) => (
-              <BookImage book={item} navigation={navigation} />
-            )}
-            keyExtractor={(item) => item.id}
-            horizontal={true}
-            style={styles.recommended}
-          />
+              )}
+              keyExtractor={(item) => item.id}
+              horizontal={true}
+              style={styles.recommended}
+            />
+          </View>
         </ScrollView>
         <AppFooter navigation={navigation} />
       </SafeAreaView>

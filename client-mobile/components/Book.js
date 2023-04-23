@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     left: "10%",
   },
   title: {
-    marginTop: 250,
+    marginTop: 200,
     fontSize: 32,
     fontWeight: "bold",
   },
@@ -202,7 +202,14 @@ function Book({ route }) {
               type="feather"
               onPress={() => setHighlight(0)}
             />
-            <RegularText style={styles.actionLabel}>To Read</RegularText>
+            <RegularText
+              style={{
+                ...styles.actionLabel,
+                color: highlight == 0 ? "green" : "white",
+              }}
+            >
+              To Read
+            </RegularText>
           </View>
           <View>
             <Icon
@@ -212,7 +219,14 @@ function Book({ route }) {
               type="entypo"
               onPress={() => setHighlight(1)}
             />
-            <RegularText style={styles.actionLabel}>Reading</RegularText>
+            <RegularText
+              style={{
+                ...styles.actionLabel,
+                color: highlight == 1 ? "green" : "white",
+              }}
+            >
+              Reading
+            </RegularText>
           </View>
           <View>
             <Icon
@@ -222,7 +236,14 @@ function Book({ route }) {
               type="ionicon"
               onPress={() => setHighlight(2)}
             />
-            <RegularText style={styles.actionLabel}>Mark Done</RegularText>
+            <RegularText
+              style={{
+                ...styles.actionLabel,
+                color: highlight == 2 ? "green" : "white",
+              }}
+            >
+              Mark Done
+            </RegularText>
           </View>
         </View>
         <View style={styles.additionalContent}>

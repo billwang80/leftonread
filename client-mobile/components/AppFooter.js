@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet, TouchableHighlight } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Icon } from "@rneui/themed";
 import RegularText from "./RegularText";
 
@@ -7,34 +7,30 @@ function AppFooter({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.main}>
-        <TouchableHighlight>
+        <TouchableOpacity>
           <View>
             <Icon name="home" color="black" />
             <RegularText>Home</RegularText>
           </View>
-        </TouchableHighlight>
-        <TouchableHighlight onPress={() => navigation.navigate("Browse")}>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Browse")}>
           <View>
             <Icon name="book" color="black" />
             <RegularText>Books</RegularText>
           </View>
-        </TouchableHighlight>
-        <TouchableHighlight onPress={() => navigation.navigate("Feed")}>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Search")}>
           <View>
-            <Icon
-              name="search"
-              color="black"
-              onPress={() => navigation.navigate("Search")}
-            />
+            <Icon name="search" color="black" />
             <RegularText>Search</RegularText>
           </View>
-        </TouchableHighlight>
-        <TouchableHighlight onPress={() => navigation.navigate("Feed")}>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Feed")}>
           <View>
             <Icon type="font-awesome-5" name="wave-square" color="black" />
             <RegularText>Feed</RegularText>
           </View>
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
     </View>
   );

@@ -93,12 +93,32 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: 10,
   },
+  leaderBoard: { marginTop: 20 },
+  leaderBoardEntry: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingEnd: 30,
+    marginTop: 2.5,
+    backgroundColor: "white",
+  },
+  leaderBoardIndex: {
+    marginLeft: 30,
+    marginRight: 30,
+  },
+  leaderBoardName: { marginLeft: 30 },
+  leaderBoardPoints: {
+    marginLeft: "auto",
+    color: "#828282",
+  },
 });
 
 const DATA = [
   {
     profile:
-      "https://media.licdn.com/dms/image/C5603AQFj6oNhrUEycg/profile-displayphoto-shrink_800_800/0/1636739777705?e=1681948800&v=beta&t=PTXRkY3BGoUMfbB7U2Dcnroi4_qxeFESikMEEmo7KMw",
+      "https://github.com/billwang80/leftonread/blob/UIDevelopment/client-mobile/Josh_Issa.jpeg?raw=true",
     name: "itsjoshuaissa",
     title: "Wide Sargasso Sea",
     author: "Jean Rhys",
@@ -111,7 +131,7 @@ const DATA = [
   },
   {
     profile:
-      "https://media.licdn.com/dms/image/D5603AQHmpUkfETNpwQ/profile-displayphoto-shrink_800_800/0/1669596480163?e=1681948800&v=beta&t=cqIpNnDU3tllZw32g_wjooZzaG2XBSN2Ur2OlHp6Rbc",
+      "https://github.com/billwang80/leftonread/blob/UIDevelopment/client-mobile/Tim_He.jpeg?raw=true",
     name: "timyhe",
     title: "East of Eden",
     author: "John Steinbeck",
@@ -125,7 +145,7 @@ const DATA = [
   },
   {
     profile:
-      "https://media.licdn.com/dms/image/D5603AQHmpUkfETNpwQ/profile-displayphoto-shrink_800_800/0/1669596480163?e=1681948800&v=beta&t=cqIpNnDU3tllZw32g_wjooZzaG2XBSN2Ur2OlHp6Rbc",
+      "https://github.com/billwang80/leftonread/blob/UIDevelopment/client-mobile/Tim_He.jpeg?raw=true",
     name: "timyhe",
     title: "Beloved",
     author: "Tony Morrison",
@@ -134,6 +154,27 @@ const DATA = [
     rating: 5,
     extra: "",
     imageURI: "https://m.media-amazon.com/images/I/41weOaDmFwL._AC_UY218_.jpg",
+  },
+];
+
+const LEADERBOARD_DATA = [
+  {
+    profile:
+      "https://github.com/billwang80/leftonread/blob/UIDevelopment/client-mobile/Josh_Issa.jpeg?raw=true",
+    name: "itsjoshuaissa",
+    points: 13589,
+  },
+  {
+    profile:
+      "https://github.com/billwang80/leftonread/blob/UIDevelopment/client-mobile/Tim_He.jpeg?raw=true",
+    name: "timyhe",
+    points: 10124,
+  },
+  {
+    profile:
+      "https://github.com/billwang80/leftonread/blob/UIDevelopment/client-mobile/Jesse_Ren.jpeg?raw=true",
+    name: "jesseren",
+    points: 9999,
   },
 ];
 
@@ -172,47 +213,68 @@ function Feed() {
           innerBorderStyle={{ width: 0 }}
         />
       </View>
-      <FlatList
-        data={DATA}
-        renderItem={({ item }) => (
-          <View style={styles.post}>
-            <Image source={{ uri: item.profile }} style={styles.profile} />
-            <View style={styles.postMain}>
-              <View style={styles.postTitle}>
-                <RegularText style={styles.userTitle}>{`${
-                  item.name
-                } ${getPostType(item.type)}`}</RegularText>
-                <RegularText style={styles.date}>{`${getTimeDifference(
-                  item.date
-                )} days ago`}</RegularText>
-              </View>
-              <BlackText style={styles.bookTitle}>
-                {`${item.title} `}{" "}
-                <RegularText
-                  style={styles.authorName}
-                >{`by ${item.author}`}</RegularText>
-              </BlackText>
-              {item.type === "review" ? (
-                <AirbnbRating
-                  isDisabled={true}
-                  count={item.rating}
-                  defaultRating={item.rating}
-                  showRating={false}
-                  selectedColor="#2c6c54"
-                  size={20}
-                />
-              ) : null}
-              <View style={styles.bookContent}>
-                <Image source={{ uri: item.imageURI }} style={styles.book} />
-                <View style={styles.extra}>
-                  <RegularText>{item.extra}</RegularText>
+      {selectedIndex == 0 ? (
+        <FlatList
+          data={DATA}
+          renderItem={({ item }) => (
+            <View style={styles.post}>
+              <Image source={{ uri: item.profile }} style={styles.profile} />
+              <View style={styles.postMain}>
+                <View style={styles.postTitle}>
+                  <RegularText style={styles.userTitle}>{`${
+                    item.name
+                  } ${getPostType(item.type)}`}</RegularText>
+                  <RegularText style={styles.date}>{`${getTimeDifference(
+                    item.date
+                  )} days ago`}</RegularText>
+                </View>
+                <BlackText style={styles.bookTitle}>
+                  {`${item.title} `}{" "}
+                  <RegularText
+                    style={styles.authorName}
+                  >{`by ${item.author}`}</RegularText>
+                </BlackText>
+                {item.type === "review" ? (
+                  <AirbnbRating
+                    isDisabled={true}
+                    count={item.rating}
+                    defaultRating={item.rating}
+                    showRating={false}
+                    selectedColor="#2c6c54"
+                    size={20}
+                  />
+                ) : null}
+                <View style={styles.bookContent}>
+                  <Image source={{ uri: item.imageURI }} style={styles.book} />
+                  <View style={styles.extra}>
+                    <RegularText>{item.extra}</RegularText>
+                  </View>
                 </View>
               </View>
             </View>
-          </View>
-        )}
-        keyExtractor={(item) => item.id + item.title}
-      />
+          )}
+          keyExtractor={(item) => item.id + item.title}
+        />
+      ) : (
+        <FlatList
+          data={LEADERBOARD_DATA}
+          renderItem={({ item, index }) => (
+            <View style={styles.leaderBoardEntry}>
+              <RegularText style={styles.leaderBoardIndex}>
+                {index + 1}
+              </RegularText>
+              <Image source={{ uri: item.profile }} style={styles.profile} />
+              <RegularText style={styles.leaderBoardName}>
+                {item.name}
+              </RegularText>
+              <RegularText
+                style={styles.leaderBoardPoints}
+              >{`${item.points} points`}</RegularText>
+            </View>
+          )}
+          style={styles.leaderBoard}
+        />
+      )}
     </SafeAreaView>
   );
 }

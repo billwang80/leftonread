@@ -7,8 +7,12 @@ const defaultStyle = StyleSheet.create({
   },
 });
 
-function BoldText({ style, children }) {
-  return <Text style={{ ...defaultStyle.text, ...style }}>{children}</Text>;
+function BoldText({ style, children, onPress }) {
+  return (
+    <Text style={{ ...defaultStyle.text, ...style }} onPress={onPress}>
+      {children}
+    </Text>
+  );
 }
 
 export default BoldText;

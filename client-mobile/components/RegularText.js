@@ -7,8 +7,12 @@ const defaultStyle = StyleSheet.create({
   },
 });
 
-function RegularText({ style, children }) {
-  return <Text style={{ ...defaultStyle.text, ...style }}>{children}</Text>;
+function RegularText({ style, children, onPress }) {
+  return (
+    <Text style={{ ...defaultStyle.text, ...style }} onPress={onPress}>
+      {children}
+    </Text>
+  );
 }
 
 export default RegularText;
